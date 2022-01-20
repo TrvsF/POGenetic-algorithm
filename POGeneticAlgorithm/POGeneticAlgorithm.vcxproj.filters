@@ -36,6 +36,15 @@
     <ClCompile Include="agent.cpp">
       <Filter>galg</Filter>
     </ClCompile>
+    <ClCompile Include="gene.cpp">
+      <Filter>galg</Filter>
+    </ClCompile>
+    <ClCompile Include="genome_manager.cpp">
+      <Filter>galg</Filter>
+    </ClCompile>
+    <ClCompile Include="genome.cpp">
+      <Filter>galg</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game_entity.h" />
@@ -71,6 +80,15 @@
       <Filter>engine</Filter>
     </ClInclude>
     <ClInclude Include="agent.h">
+      <Filter>galg</Filter>
+    </ClInclude>
+    <ClInclude Include="gene.h">
+      <Filter>galg</Filter>
+    </ClInclude>
+    <ClInclude Include="genome_manager.h">
+      <Filter>galg</Filter>
+    </ClInclude>
+    <ClInclude Include="genome.h">
       <Filter>galg</Filter>
     </ClInclude>
   </ItemGroup>

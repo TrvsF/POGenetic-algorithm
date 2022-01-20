@@ -17,6 +17,7 @@ class physics
 		static physics* s_instance;
 
 		std::list<game_entity*> m_gameEntities;
+		std::list<game_entity*> m_collisonEnties;
 
 		physics();
 		~physics();
@@ -25,6 +26,7 @@ class physics
 		static physics* INSTANCE();
 
 		void addEntity(game_entity* entity);
+		void addEntityNoCollison(game_entity* entity);
 		void translateEntitiesNotPlayer(Vector2 vector);
 
 		bool isGoingToCollideWithBB(BoundingBox playerBB);

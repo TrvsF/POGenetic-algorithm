@@ -139,6 +139,9 @@
     <ClCompile Include="agent.cpp" />
     <ClCompile Include="game_engine.cpp" />
     <ClCompile Include="game_entity.cpp" />
+    <ClCompile Include="gene.cpp" />
+    <ClCompile Include="genome.cpp" />
+    <ClCompile Include="genome_manager.cpp" />
     <ClCompile Include="graphics.cpp" />
     <ClCompile Include="inputs.cpp" />
     <ClCompile Include="levels.cpp" />
@@ -156,6 +159,9 @@
     <ClInclude Include="agent.h" />
     <ClInclude Include="game_engine.h" />
     <ClInclude Include="game_entity.h" />
+    <ClInclude Include="gene.h" />
+    <ClInclude Include="genome.h" />
+    <ClInclude Include="genome_manager.h" />
     <ClInclude Include="graphics.h" />
     <ClInclude Include="inputs.h" />
     <ClInclude Include="levels.h" />

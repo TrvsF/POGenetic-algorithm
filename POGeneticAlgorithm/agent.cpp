@@ -157,7 +157,7 @@ agent::agent(Vector2 position)
 	m_hasBoosted = false;
 	m_boostCooldownCount = 0;
 
-	// physics::INSTANCE()->addEntity(this);
+	physics::INSTANCE()->addEntityNoCollison(this);
 }
 
 agent::~agent()

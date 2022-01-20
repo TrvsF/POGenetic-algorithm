@@ -9,6 +9,14 @@ gene::gene(int moveForward, int moveBackward, int turnRight, int turnLeft, int b
 	m_gene[4] = boost;
 }
 
+gene::gene()
+{
+	for (int i = 0; i < sizeof(m_gene); i++)
+	{
+		m_gene[i] = randomBinary();
+	}
+}
+
 gene::~gene()
 {
 }

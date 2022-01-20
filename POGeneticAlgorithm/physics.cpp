@@ -13,6 +13,12 @@ physics* physics::INSTANCE()
 
 void physics::addEntity(game_entity* entity)
 {
+	m_collisonEnties.push_back(entity);
+	m_gameEntities.push_back(entity);
+}
+
+void physics::addEntityNoCollison(game_entity* entity)
+{
 	m_gameEntities.push_back(entity);
 }
 
@@ -26,7 +32,7 @@ void physics::translateEntitiesNotPlayer(Vector2 vector)
 
 bool physics::isGoingToCollideWithBB(BoundingBox playerBB)
 {		
-	for (auto const& entity : m_gameEntities)
+	for (auto const& entity : m_collisonEnties)
 	{
 		if (entity == nullptr)
 			continue;
