@@ -46,14 +46,6 @@ void player::playerInput()
 	{
 		boost();
 	}
-	if (m_inputs->keyPressed(SDL_SCANCODE_I))
-	{
-		if (m_projCount > 50)
-			m_projCount = 0;
-
-		projectiles[m_projCount] = new projectile(rotation(), 7.0f, pos());
-		m_projCount++;
-	}
 }
 
 void player::checkBoostCooldown()
@@ -235,15 +227,6 @@ void player::update()
 
 	printf("vel : %f | pos %.1f, %.1f | rot %.1f | boost : %d\n", velocity(), pos().x, pos().y, rotation(), m_canBoost);
 
-	// handle projecitle updates
-	for (int i = 0; i < 50; i++)
-	{
-		if (projectiles[i] == nullptr)
-			continue;
-
-		projectiles[i]->update();
-	}
-
 	// reset tick based vars
 	m_boostIndex = 0;
 	m_tickVelocity = 0;
@@ -253,15 +236,6 @@ void player::update()
 void player::render()
 {
 	// drawDebugBB();
-	m_camera->render();
+	// m_camera->render();
 	renderTexture();
-
-	// handles projectile rendering
-	for (int i = 0; i < 50; i++)
-	{
-		if (projectiles[i] == nullptr)
-			continue;
-
-		projectiles[i]->render();
-	}
 }

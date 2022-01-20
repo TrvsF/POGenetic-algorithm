@@ -17,8 +17,7 @@
 #include <SDL.h>
 #include "player.h"
 #include "wall.h"
-#include "pickups.h"
-#include "enemy.h"
+#include "agent.h"
 
 class levels
 {
@@ -44,7 +43,6 @@ class levels
 		player* m_playerChar;
 		physics* m_physics;
 		texture* m_title;
-		pickups* m_pickups;
 		//------------------//
 
 	public:

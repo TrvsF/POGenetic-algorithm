@@ -18,6 +18,11 @@ static float randomFloat(float low, float high)
 	return low + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (high - low)));
 }
 
+static int randomBinary()
+{
+	return rand() % 2;
+}
+
 struct Vector2
 {
 	float x;

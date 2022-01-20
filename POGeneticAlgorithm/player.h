@@ -10,9 +10,7 @@
 
 #include "game_entity.h"
 #include "inputs.h"
-#include "projectile.h"
 #include "physics.h"
-#include "pickups.h"
 #include "camera.h"
 #include <iostream>
 
@@ -24,9 +22,6 @@ class player : public game_entity
 		const float MAX_VEL_BOOST = 7.5f; // max boosted velocity
 		const float BOOST_MUL[3] = {2.1f, 2.2f, 1.2f}; // how fast you are boosted dependent of if you're turning
 		// ^ lower values mean that you have to spam space more for it to work
-
-		projectile* projectiles[100];
-		pickups* pickups[20];
 
 		inputs* m_inputs;
 

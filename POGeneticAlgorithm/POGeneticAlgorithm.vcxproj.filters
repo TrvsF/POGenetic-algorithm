@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="game_entity.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="texture.cpp" />
+    <ClCompile Include="texture_helper.cpp" />
+    <ClCompile Include="wall.cpp" />
+    <ClCompile Include="assets.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="timer.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="physics.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="levels.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="inputs.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="game_engine.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="agent.cpp">
+      <Filter>galg</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="game_entity.h" />
+    <ClInclude Include="math_helper.h" />
+    <ClInclude Include="texture.h" />
+    <ClInclude Include="texture_helper.h" />
+    <ClInclude Include="wall.h" />
+    <ClInclude Include="assets.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="timer.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="physics.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="levels.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="inputs.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="game_engine.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="agent.h">
+      <Filter>galg</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="engine">
+      <UniqueIdentifier>{1a578184-f561-429e-a204-2947f1b6ef1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="galg">
+      <UniqueIdentifier>{6361410c-eeb7-4b54-8dfd-a309f335b895}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="player">
+      <UniqueIdentifier>{6a1ed5d4-1b2a-4fa8-a694-2b5f56eac570}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="character.png">
+      <Filter>player</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
