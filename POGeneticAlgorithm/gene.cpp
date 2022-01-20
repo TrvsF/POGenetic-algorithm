@@ -11,7 +11,7 @@ gene::gene(int moveForward, int moveBackward, int turnRight, int turnLeft, int b
 
 gene::gene()
 {
-	for (int i = 0; i < sizeof(m_gene); i++)
+	for (int i = 0; i < 5; i++)
 	{
 		m_gene[i] = randomBinary();
 	}
@@ -19,4 +19,29 @@ gene::gene()
 
 gene::~gene()
 {
+}
+
+bool gene::shouldMoveForward()
+{
+	return m_gene[0];
+}
+
+bool gene::shouldMoveBackward()
+{
+	return m_gene[1];
+}
+
+bool gene::shouldTurnRight()
+{
+	return m_gene[2];
+}
+
+bool gene::shouldTrunLeft()
+{
+	return m_gene[3];
+}
+
+bool gene::shouldBoost()
+{
+	return m_gene[4];
 }

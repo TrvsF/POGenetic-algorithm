@@ -9,9 +9,14 @@ genome::~genome()
 {
 }
 
+gene* genome::getGeneAtIndex(int i)
+{
+	return m_genome[i];
+}
+
 void genome::populate()
 {
-	for (int i = 0; i < sizeof(m_genome); i++)
+	for (int i = 0; i < 100000; i++)
 	{
 		m_genome[i] = new gene();
 	}

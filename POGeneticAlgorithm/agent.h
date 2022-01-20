@@ -9,10 +9,15 @@
 
 #include "game_entity.h"
 #include "physics.h"
+#include "genome.h"
+#include <iostream>
 
 class agent : public game_entity
 {
 	private:
+		/*----------
+			MOVEMENT
+		----------*/
 		const int BOOST_COOLDOWN = 210; // ammount of frames until can boost again
 		const float MAX_VEL = 2.6f; // max normal velocity without boost
 		const float MAX_VEL_BOOST = 7.5f; // max boosted velocity
@@ -44,9 +49,24 @@ class agent : public game_entity
 
 		void movePlayer(Vector2 movementVec);
 
+		/*----------
+			GA
+		----------*/
+		int m_simStep;
+
+		genome* m_genome;
+
+		void handleGeneInputs();
+
 	public:
 		agent(Vector2 position);
 		virtual ~agent();
+
+		genome* gnome();
+		void gnome(genome* g);
+
+		void beginSimulation();
+		void stopSimulation();
 
 		void update();
 		void render();

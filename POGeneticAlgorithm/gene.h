@@ -12,13 +12,18 @@
 class gene
 {
 	private:
+		int m_gene[5];
 
 	public:
 		gene(int moveForward, int moveBackward, int turnRight, int turnLeft, int boost);
 		gene();
 		~gene();
 
-		int m_gene[5];
+		bool shouldMoveForward();
+		bool shouldMoveBackward();
+		bool shouldTurnRight();
+		bool shouldTrunLeft();
+		bool shouldBoost();
 };
 
 #endif

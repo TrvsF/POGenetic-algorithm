@@ -12,11 +12,13 @@
 class genome
 {
 	private:
-		gene* m_genome[1000];
+		gene* m_genome[100000];
 
 	public:
 		genome();
 		~genome();
+
+		gene* getGeneAtIndex(int i);
 
 		void populate();
 };

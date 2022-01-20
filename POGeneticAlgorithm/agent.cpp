@@ -143,6 +143,39 @@ void agent::movePlayer(Vector2 movementVec)
 	translate(movementVec);
 }
 
+void agent::handleGeneInputs()
+{
+	gene* tempGene = m_genome->getGeneAtIndex(m_simStep);
+
+	printf("SIMSTEP : %i [%i %i %i %i %i]\n", m_simStep, tempGene->shouldMoveForward(), tempGene->shouldMoveBackward(),
+		tempGene->shouldTurnRight(), tempGene->shouldTrunLeft(), tempGene->shouldBoost());
+
+	if (tempGene->shouldMoveForward())
+	{
+		moveForward();
+	}
+
+	if (tempGene->shouldMoveBackward())
+	{
+		moveBackward();
+	}
+
+	if (tempGene->shouldTurnRight())
+	{
+		turnRight();
+	}
+
+	if (tempGene->shouldTrunLeft())
+	{
+		turnLeft();
+	}
+
+	if (tempGene->shouldBoost())
+	{
+		boost();
+	}
+}
+
 agent::agent(Vector2 position)
 {
 	pos(position);
@@ -157,17 +190,46 @@ agent::agent(Vector2 position)
 	m_hasBoosted = false;
 	m_boostCooldownCount = 0;
 
+	m_simStep = -1;
+
+	m_genome = new genome();
+
 	physics::INSTANCE()->addEntityNoCollison(this);
+
+	beginSimulation();
 }
 
 agent::~agent()
 {
 }
 
+genome* agent::gnome()
+{
+	return m_genome;
+}
+
+void agent::gnome(genome* g)
+{
+	m_genome = g;
+}
+
+void agent::beginSimulation()
+{
+	m_simStep = 0;
+}
+
+void agent::stopSimulation()
+{
+	m_simStep = -1;
+}
+
 void agent::update()
 {
-	// TODO get gene and do inputs
-	moveForward();
+	if (m_simStep == -1 || m_simStep >= 100000)
+		return;
+
+	// does gene inputs
+	handleGeneInputs();
 
 	// check the boost cooldown meter
 	checkBoostCooldown();
@@ -178,6 +240,8 @@ void agent::update()
 	m_boostIndex = 0;
 	m_tickVelocity = 0;
 	m_hasBoosted = false;
+
+	m_simStep++;
 }
 
 void agent::render()
