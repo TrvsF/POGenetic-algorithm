@@ -18,6 +18,8 @@
 #include "player.h"
 #include "wall.h"
 #include "agent.h"
+#include <fstream>
+#include <string>
 
 class levels
 {
@@ -27,7 +29,11 @@ class levels
 
 		enum e_levelType { menu, story, custom };
 
+		enum e_currentReadType { name, type, brick, character, idle };
+
 		static levels* s_instance;
+
+		std::string m_levelName;
 
 		e_levelType m_currentLevelType;
 
@@ -49,7 +55,7 @@ class levels
 		static levels* INSTANCE();
 
 		void loadDefaultLevel();
-		bool loadLevel(std::string name);
+		bool loadLevel(std::string fileName);
 
 		void update();
 		void render();

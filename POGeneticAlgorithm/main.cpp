@@ -1,6 +1,8 @@
 #pragma warning(default:4265)
 #include "game_engine.h"
 #include <iostream>
+#include <ctime>
+#include <cstdlib> 
 /*----------
 	main c++ class for POGame
 	starts the main program
@@ -22,6 +24,8 @@ int main(int argc, char *argv[])
 		 - items and such represented as chars
 	*/
 	printf("STARTING POGame\n\n\n");
+
+	srand((int)time(NULL));
 
 	// create instance of the game engine and init it
 	gameInstance = new game_engine();
