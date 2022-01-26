@@ -147,8 +147,7 @@ void agent::handleGeneInputs()
 {
 	gene* tempGene = m_genome->getGeneAtIndex(m_simStep);
 
-	printf("SIMSTEP : %i [%i %i %i %i %i]\n", m_simStep, tempGene->shouldMoveForward(), tempGene->shouldMoveBackward(),
-		tempGene->shouldTurnRight(), tempGene->shouldTrunLeft(), tempGene->shouldBoost());
+	// printf("SIMSTEP : %i [%i %i %i %i %i]\n", m_simStep, tempGene->shouldMoveForward(), tempGene->shouldMoveBackward(), tempGene->shouldTurnRight(), tempGene->shouldTrunLeft(), tempGene->shouldBoost());
 
 	if (tempGene->shouldMoveForward())
 	{

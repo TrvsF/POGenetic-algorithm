@@ -18,6 +18,7 @@
 #include "player.h"
 #include "wall.h"
 #include "agent.h"
+#include "agent_manager.h"
 #include <fstream>
 #include <string>
 
@@ -47,7 +48,7 @@ class levels
 		std::list<wall*> m_walls;
 
 		player* m_playerChar;
-		physics* m_physics;
+
 		texture* m_title;
 		//------------------//
 

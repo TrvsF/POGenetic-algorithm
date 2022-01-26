@@ -119,7 +119,10 @@ bool levels::loadLevel(std::string fileName)
 				{
 					int x = std::stoi(builder[wordCount]);
 					int y = std::stoi(currentWord);
-					m_currentLevelObjects.push_back(new agent(Vector2((float)x, (float)y)));
+
+					for (int i = 0; i < agent_manager::INSTANCE()->POPULATION_MULTIPLYER; i++)
+						m_currentLevelObjects.push_back(new agent(Vector2((float)x, (float)y)));
+
 					currentType = idle;
 				}
 				break;

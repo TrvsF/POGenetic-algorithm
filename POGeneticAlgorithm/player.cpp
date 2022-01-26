@@ -168,52 +168,6 @@ void player::cancelBoost()
 		m_canBoost = false;
 }
 
-void player::handleQuarterSteps()
-{
-	Vector2 movementVec = getMovement();
-
-	movementVec = movementVec / 4.0f;
-
-	for (int i = 0; i < 4; i++)
-	{
-		BoundingBox nextFrameBB = bb() + movementVec;
-
-		// if player is going to collide with another object
-		if (physics::INSTANCE()->isGoingToCollideWithBB(nextFrameBB))
-		{
-			// cancel the player's boost
-			cancelBoost();
-
-			// try and move only 1 axis (for the sliding against the wall effect
-			Vector2 xVec = Vector2(movementVec.x, 0);
-			Vector2 yVec = Vector2(0, movementVec.y);
-
-			BoundingBox xbb = bb() + xVec;
-			BoundingBox ybb = bb() + yVec;
-
-			// can move x
-			if (!physics::INSTANCE()->isGoingToCollideWithBB(xbb))
-			{
-				movePlayer(xVec * 2);
-			}
-			// can move y
-			if (!physics::INSTANCE()->isGoingToCollideWithBB(ybb))
-			{
-				movePlayer(yVec * 2);
-			}
-
-			// only a little bit of slide
-			return;
-		}
-		// if not
-		else
-		{
-			movePlayer(movementVec);
-		}
-	}
-
-}
-
 void player::update()
 {
 	// check the player's input
@@ -222,8 +176,8 @@ void player::update()
 	// check if cooldown is over
 	checkBoostCooldown();
 
-	// handle player movement
-	handleQuarterSteps();
+	// move the player
+	movePlayer(getMovement());
 
 	// printf("vel : %f | pos %.1f, %.1f | rot %.1f | boost : %d\n", velocity(), pos().x, pos().y, rotation(), m_canBoost);
 
