@@ -16,39 +16,40 @@
 #include "levels.h"
 #include "physics.h"
 
-class game_engine 
+class game_engine
 {
-	private:
-		const int FRAME_RATE = 144;
-		const int PHYS_RATE = 144;
+private:
+	const int FRAME_RATE = 144;
+	const int PHYS_RATE = 150;
 
-		SDL_Event m_events;
+	SDL_Event m_events;
 
-		timer* m_timer;
-		timer* m_fpsTimer;
+	timer* m_gtickTimer;
+	timer* m_fpsTimer;
 
-		graphics* m_graphics;
-		assets* m_assets;
-		inputs* m_inputs;
-		levels* m_levels;
-		physics* m_physics;
+	graphics* m_graphics;
+	assets* m_assets;
+	inputs* m_inputs;
+	levels* m_levels;
+	physics* m_physics;
 
-		bool m_isRunning;
+	bool m_isRunning;
 
-		void earlyUpdate();
-		void update();
-		void lateUpdate();
-		void render();
+	void earlyUpdate();
+	void update();
+	void lateUpdate();
+	void doUpdates();
+	void render();
 
-	public:
-		game_engine();
-		~game_engine();
+public:
+	game_engine();
+	~game_engine();
 
-		bool init();
+	bool init();
 
-		void stop();
-		void run();
+	void stop();
+	void run();
 
-		bool running() { return m_isRunning; }
+	bool running() { return m_isRunning; }
 };
 #endif

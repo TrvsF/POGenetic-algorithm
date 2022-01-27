@@ -8,7 +8,7 @@ game_engine::~game_engine()
 {
 	m_assets = NULL;
 	m_graphics = NULL;
-	m_timer = NULL;
+	m_gtickTimer = NULL;
 	m_fpsTimer = NULL;
 	m_inputs = NULL;
 	m_levels = NULL;
@@ -21,18 +21,18 @@ bool game_engine::init()
 	m_isRunning = false;
 
 	// init graphics
-	printf("starting graphics\n:------:\n");
+	printf("starting graphics\n");
 	m_graphics = graphics::INSTANCE();
 	if (m_graphics->init("POGame", 1024, 768, false))
 	{
-		printf(":------:\ngraphics started!\n");
+		printf("graphics started!\n\n");
 		m_isRunning = true;
 	}
 
 	// init timers
 	printf("loading timers...");
-	m_timer = timer::INSTANCE();
-	m_fpsTimer = timer::INSTANCE();
+	m_gtickTimer = new timer();
+	m_fpsTimer = new timer();
 	printf("done!\n");
 
 	// init asset manager
@@ -56,7 +56,7 @@ bool game_engine::init()
 	printf("done!\n");
 
 	printf("SDL naf : %s\n", SDL_GetBasePath());
-	
+
 
 	return true;
 }
@@ -73,38 +73,36 @@ void game_engine::run()
 	while (m_isRunning)
 	{
 		// tick timer
-		m_timer->update();
+		m_gtickTimer->update();
+		m_fpsTimer->update();
 
-		while (SDL_PollEvent(&m_events) != 0) 
+		while (SDL_PollEvent(&m_events) != 0)
 		{
 			switch (m_events.type)
 			{
-				case SDL_QUIT:
-					m_isRunning = false;
-					break;
+			case SDL_QUIT:
+				m_isRunning = false;
+				break;
 			}
 		}
 		// 144 times a second refresh the renderer
-		if (m_timer->deltaTime() >= 1.0f / PHYS_RATE)
+		if (m_gtickTimer->deltaTime() >= 1.0f / PHYS_RATE)
 		{
-			earlyUpdate();
-			update();
-			lateUpdate();
-			render();
+			doUpdates();
 		}
 
 		if (m_fpsTimer->deltaTime() >= 1.0f / FRAME_RATE)
 		{
-			
+			render();
 		}
-	
+
 	}
 }
 
 // update all inputs
 void game_engine::earlyUpdate()
 {
-	m_timer->reset();
+	m_gtickTimer->reset();
 	m_inputs->update();
 }
 
@@ -118,6 +116,13 @@ void game_engine::update()
 void game_engine::lateUpdate()
 {
 	m_inputs->updatePrev();
+}
+
+void game_engine::doUpdates()
+{
+	earlyUpdate();
+	update();
+	lateUpdate();
 }
 
 // render the new frame

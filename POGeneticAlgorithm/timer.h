@@ -11,28 +11,22 @@
 
 class timer
 {
-	private:
-		static timer* s_instance;
+private:
+	static timer* s_instance;
 
-		int m_startTicks;
-		int m_elapsedTicks;
+	int m_startTicks;
+	int m_elapsedTicks;
 
-		float m_deltaTime;
-		float m_timeScale;
+	float m_deltaTime;
 
-	public:
-		static timer* INSTANCE();
+public:
+	timer();
+	~timer();
 
-		timer();
-		~timer();
+	void reset();
 
-		void reset();
+	float deltaTime();
 
-		float deltaTime();
-
-		void timescale(float t);
-		float timescale();
-
-		void update();
+	void update();
 };
 #endif
