@@ -19,6 +19,7 @@
 #include "wall.h"
 #include "agent.h"
 #include "agent_manager.h"
+#include "goal.h"
 #include <fstream>
 #include <string>
 

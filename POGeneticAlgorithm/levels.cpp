@@ -16,35 +16,11 @@ void levels::loadDefaultLevel()
 
 	loadLevel("level.pog");
 
+	// set where goal should be
+	m_currentLevelObjects.push_back(new goal(Vector2(220, 110)));
+
+	// add player camera object
 	m_currentLevelObjects.push_back(new player(Vector2(400, 300)));
-
-	/*
-	m_currentLevelType = menu;
-
-	m_currentLevelTextures.push_back(new texture("terminus.ttf", "POGame", 64, { 255, 0, 0 }));
-
-	m_currentLevelObjects.push_back(new player(Vector2(400, 300)));
-
-	m_currentLevelObjects.push_back(new agent(Vector2(700, 500)));
-	// m_currentLevelObjects.push_back(new agent(Vector2(1200, 500)));
-
-	m_currentLevelObjects.push_back(new wall(Vector2(16, 16)));
-
-	int val = 16;
-	for (int i = 0; i < 20; i++)
-	{
-		m_currentLevelObjects.push_back(new wall(Vector2((float)val, 200)));
-		m_currentLevelObjects.push_back(new wall(Vector2((float)val, 600)));
-		val += 16;
-	}
-	val = 16;
-	for (int i = 0; i < 20; i++)
-	{
-		//m_currentLevelObjects.push_back(new wall(Vector2(16, (float)val)));
-		m_currentLevelObjects.push_back(new wall(Vector2(416, (float)val)));
-		val += 16;
-	}
-	*/
 }
 
 bool levels::loadLevel(std::string fileName)

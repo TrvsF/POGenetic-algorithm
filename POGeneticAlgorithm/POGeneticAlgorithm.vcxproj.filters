@@ -45,6 +45,7 @@
     <ClCompile Include="agent_manager.cpp">
       <Filter>galg</Filter>
     </ClCompile>
+    <ClCompile Include="goal.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game_entity.h" />
@@ -89,6 +90,9 @@
       <Filter>galg</Filter>
     </ClInclude>
     <ClInclude Include="agent_manager.h">
+      <Filter>galg</Filter>
+    </ClInclude>
+    <ClInclude Include="goal.h">
       <Filter>galg</Filter>
     </ClInclude>
   </ItemGroup>
