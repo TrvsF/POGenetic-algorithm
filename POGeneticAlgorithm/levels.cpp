@@ -14,13 +14,17 @@ void levels::loadDefaultLevel()
 {
 	resetLevel();
 
-	loadLevel("level.pog");
+	m_goal = new goal(Vector2(220, 110));
 
 	// set where goal should be
-	m_currentLevelObjects.push_back(new goal(Vector2(220, 110)));
+	m_currentLevelObjects.push_back(m_goal);
 
 	// add player camera object
 	m_currentLevelObjects.push_back(new player(Vector2(400, 300)));
+
+	loadLevel("level.pog");
+
+	agent_manager::INSTANCE()->startDebugTest();
 }
 
 bool levels::loadLevel(std::string fileName)
@@ -97,7 +101,11 @@ bool levels::loadLevel(std::string fileName)
 					int y = std::stoi(currentWord);
 
 					for (int i = 0; i < agent_manager::INSTANCE()->POPULATION_MULTIPLYER; i++)
-						m_currentLevelObjects.push_back(new agent(Vector2((float)x, (float)y)));
+					{
+						agent* tempAgent = new agent(Vector2((float)x, (float)y), m_goal);
+						m_currentLevelObjects.push_back(tempAgent);
+						agent_manager::INSTANCE()->addAgent(tempAgent);
+					}
 
 					currentType = idle;
 				}

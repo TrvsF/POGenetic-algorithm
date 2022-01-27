@@ -15,17 +15,17 @@ class agent_manager
 	private:
 		static agent_manager* s_instance;
 
-		agent* m_agents;
+		std::list<agent*> m_agents;
 
 	public:
 		static agent_manager* INSTANCE();
 
-		const int POPULATION_MULTIPLYER = 10;
+		void addAgent(agent* agent);
+		void startDebugTest();
+
+		const int POPULATION_MULTIPLYER = 20;
 
 		agent_manager();
 		~agent_manager();
-
-
 };
-
 #endif

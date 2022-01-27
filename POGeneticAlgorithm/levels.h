@@ -51,6 +51,8 @@ class levels
 		player* m_playerChar;
 
 		texture* m_title;
+
+		goal* m_goal;
 		//------------------//
 
 	public:

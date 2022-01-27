@@ -10,6 +10,19 @@ agent_manager* agent_manager::INSTANCE()
 	return s_instance;
 }
 
+void agent_manager::addAgent(agent* agent)
+{
+	m_agents.push_back(agent);
+}
+
+void agent_manager::startDebugTest()
+{
+	for (auto const& agent : m_agents)
+	{
+		agent->beginSimulation();
+	}
+}
+
 agent_manager::agent_manager()
 {
 	/*

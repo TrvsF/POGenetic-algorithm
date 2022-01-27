@@ -59,48 +59,43 @@ void agent::cancelBoost()
 		m_canBoost = false;
 }
 
-void agent::doQrterStepMovement()
+void agent::doMovement()
 {
 	Vector2 movementVec = getMovementVector();
 
-	movementVec = movementVec / 4.0f;
+	BoundingBox nextFrameBB = bb() + movementVec;
 
-	for (int i = 0; i < 4; i++)
+	// if player is going to collide with another object
+	if (physics::INSTANCE()->isGoingToCollideWithBB(nextFrameBB))
 	{
-		BoundingBox nextFrameBB = bb() + movementVec;
+		// cancel the player's boost
+		cancelBoost();
 
-		// if player is going to collide with another object
-		if (physics::INSTANCE()->isGoingToCollideWithBB(nextFrameBB))
+		// try and move only 1 axis (for the sliding against the wall effect
+		Vector2 xVec = Vector2(movementVec.x, 0);
+		Vector2 yVec = Vector2(0, movementVec.y);
+
+		BoundingBox xbb = bb() + xVec;
+		BoundingBox ybb = bb() + yVec;
+
+		// can move x
+		if (!physics::INSTANCE()->isGoingToCollideWithBB(xbb))
 		{
-			// cancel the player's boost
-			cancelBoost();
-
-			// try and move only 1 axis (for the sliding against the wall effect
-			Vector2 xVec = Vector2(movementVec.x, 0);
-			Vector2 yVec = Vector2(0, movementVec.y);
-
-			BoundingBox xbb = bb() + xVec;
-			BoundingBox ybb = bb() + yVec;
-
-			// can move x
-			if (!physics::INSTANCE()->isGoingToCollideWithBB(xbb))
-			{
-				movePlayer(xVec * 2);
-			}
-			// can move y
-			if (!physics::INSTANCE()->isGoingToCollideWithBB(ybb))
-			{
-				movePlayer(yVec * 2);
-			}
-
-			// only a little bit of slide
-			return;
+			movePlayer(xVec * 2);
 		}
-		// if not
-		else
+		// can move y
+		if (!physics::INSTANCE()->isGoingToCollideWithBB(ybb))
 		{
-			movePlayer(movementVec);
+			movePlayer(yVec * 2);
 		}
+
+		// only a little bit of slide
+		return;
+	}
+	// if not
+	else
+	{
+		movePlayer(movementVec);
 	}
 }
 
@@ -175,11 +170,13 @@ void agent::handleGeneInputs()
 	}
 }
 
-agent::agent(Vector2 position)
+agent::agent(Vector2 position, goal* goal)
 {
 	pos(position);
 
 	setTexture("enemy.png");
+
+	m_goal = goal;
 
 	m_tickVelocity = 0;
 
@@ -194,8 +191,6 @@ agent::agent(Vector2 position)
 	m_genome = new genome();
 
 	physics::INSTANCE()->addEntityNoCollison(this);
-
-	beginSimulation();
 }
 
 agent::~agent()
@@ -222,10 +217,21 @@ void agent::stopSimulation()
 	m_simStep = -1;
 }
 
+int agent::getFitness()
+{
+	float dtg = distnaceBetweenVecs(pos(), m_goal->pos());
+	return dtg; //- m_timer->deltaTime()
+}
+
 void agent::update()
 {
-	if (m_simStep == -1 || m_simStep >= 100000)
+	if (m_simStep == -1 || m_simStep >= 2000)
+	{
+		if (m_simStep == 2000)
+			printf("fitness : %i\n", getFitness());
+		m_simStep++;
 		return;
+	}
 
 	// does gene inputs
 	handleGeneInputs();
@@ -234,7 +240,7 @@ void agent::update()
 	checkBoostCooldown();
 
 	// do the actual moving part
-	doQrterStepMovement();
+	doMovement();
 
 	m_boostIndex = 0;
 	m_tickVelocity = 0;

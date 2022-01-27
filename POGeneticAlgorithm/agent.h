@@ -10,6 +10,8 @@
 #include "game_entity.h"
 #include "physics.h"
 #include "genome.h"
+#include "goal.h"
+#include "timer.h"
 #include <iostream>
 
 class agent : public game_entity
@@ -42,7 +44,7 @@ class agent : public game_entity
 		void checkBoostCooldown();
 		void cancelBoost();
 
-		void doQrterStepMovement();
+		void doMovement();
 
 		Vector2 getMovementVector();
 		float calcVelocity();
@@ -54,12 +56,14 @@ class agent : public game_entity
 		----------*/
 		int m_simStep;
 
+		timer* m_timer;
 		genome* m_genome;
+		goal* m_goal;
 
 		void handleGeneInputs();
 
 	public:
-		agent(Vector2 position);
+		agent(Vector2 position, goal* goal);
 		virtual ~agent();
 
 		genome* gnome();
@@ -67,6 +71,8 @@ class agent : public game_entity
 
 		void beginSimulation();
 		void stopSimulation();
+
+		int getFitness();
 
 		void update();
 		void render();

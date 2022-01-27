@@ -16,7 +16,7 @@ gene* genome::getGeneAtIndex(int i)
 
 void genome::populate()
 {
-	for (int i = 0; i < 100000; i++)
+	for (int i = 0; i < 2000; i++)
 	{
 		m_genome[i] = new gene();
 	}

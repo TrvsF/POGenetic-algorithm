@@ -106,6 +106,11 @@ const Vector2 VEC2_ONE = { 1.0f, 1.0f };
 const Vector2 VEC2_UP = { 0.0f, 1.0f };
 const Vector2 VEC2_RIGHT = { 1.0f, 0.0f };
 
+static float distnaceBetweenVecs(Vector2 vec1, Vector2 vec2)
+{
+	return sqrtf(pow(vec2.y - vec1.y, 2) + pow(vec2.x - vec1.x, 2));
+}
+
 struct BoundingBox
 {
 	float left;
