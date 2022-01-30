@@ -22,7 +22,7 @@ void levels::loadDefaultLevel()
 	// add player camera object
 	m_currentLevelObjects.push_back(new player(Vector2(400, 300)));
 
-	loadLevel("level.pog");
+	loadLevel("level2.pog");
 
 	agent_manager::INSTANCE()->startDebugTest();
 }

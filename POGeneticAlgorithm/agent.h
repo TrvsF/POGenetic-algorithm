@@ -54,6 +54,7 @@ class agent : public game_entity
 		/*----------
 			GA
 		----------*/
+		bool m_isSimming;
 		int m_simStep;
 
 		timer* m_timer;
@@ -72,7 +73,7 @@ class agent : public game_entity
 		void beginSimulation();
 		void stopSimulation();
 
-		int getFitness();
+		float getFitness();
 
 		void update();
 		void render();

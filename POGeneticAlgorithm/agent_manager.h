@@ -15,6 +15,9 @@ class agent_manager
 	private:
 		static agent_manager* s_instance;
 
+		const int SIM_STEPS = 5000;
+		int m_tickCounter;
+
 		std::list<agent*> m_agents;
 
 	public:
@@ -22,10 +25,13 @@ class agent_manager
 
 		void addAgent(agent* agent);
 		void startDebugTest();
+		void stopDebugTest();
 
-		const int POPULATION_MULTIPLYER = 20;
+		const int POPULATION_MULTIPLYER = 10;
 
 		agent_manager();
 		~agent_manager();
+
+		void update();
 };
 #endif

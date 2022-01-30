@@ -142,8 +142,6 @@ void agent::handleGeneInputs()
 {
 	gene* tempGene = m_genome->getGeneAtIndex(m_simStep);
 
-	// printf("SIMSTEP : %i [%i %i %i %i %i]\n", m_simStep, tempGene->shouldMoveForward(), tempGene->shouldMoveBackward(), tempGene->shouldTurnRight(), tempGene->shouldTrunLeft(), tempGene->shouldBoost());
-
 	if (tempGene->shouldMoveForward())
 	{
 		moveForward();
@@ -210,28 +208,27 @@ void agent::gnome(genome* g)
 void agent::beginSimulation()
 {
 	m_simStep = 0;
+	m_isSimming = true;
 }
 
 void agent::stopSimulation()
 {
 	m_simStep = -1;
+	m_isSimming = false;
 }
 
-int agent::getFitness()
+float agent::getFitness()
 {
-	float dtg = distnaceBetweenVecs(pos(), m_goal->pos());
-	return dtg; //- m_timer->deltaTime()
+	float dtg = 1.0f / distnaceBetweenVecs(pos(), m_goal->pos());
+	return dtg; 
 }
 
 void agent::update()
 {
-	if (m_simStep == -1 || m_simStep >= 2000)
-	{
-		if (m_simStep == 2000)
-			printf("fitness : %i\n", getFitness());
-		m_simStep++;
+	if (!m_isSimming)
 		return;
-	}
+
+	m_simStep++;
 
 	// does gene inputs
 	handleGeneInputs();
@@ -246,7 +243,11 @@ void agent::update()
 	m_tickVelocity = 0;
 	m_hasBoosted = false;
 
-	m_simStep++;
+	if (m_simStep == 5000) // debug stop switch
+	{
+		stopSimulation();
+		printf("fitness : %f\n", getFitness());
+	}
 }
 
 void agent::render()

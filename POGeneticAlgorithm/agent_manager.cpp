@@ -23,8 +23,18 @@ void agent_manager::startDebugTest()
 	}
 }
 
+void agent_manager::stopDebugTest()
+{
+	for (auto const& agent : m_agents)
+	{
+		agent->stopSimulation();
+		printf("fitness : %.5f\n", agent->getFitness());
+	}
+}
+
 agent_manager::agent_manager()
 {
+	m_tickCounter = 0;
 	/*
 		selection methods to add:
 		- https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)#Boltzmann_Selection
@@ -33,4 +43,15 @@ agent_manager::agent_manager()
 
 agent_manager::~agent_manager()
 {
+}
+
+void agent_manager::update()
+{
+	m_tickCounter++;
+
+	if (m_tickCounter == 2000)
+	{
+		printf("stopping test\n");
+		stopDebugTest();
+	}
 }

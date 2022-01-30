@@ -13,6 +13,7 @@ game_engine::~game_engine()
 	m_inputs = NULL;
 	m_levels = NULL;
 	m_physics = NULL;
+	m_agents = NULL;
 }
 
 // init game engine and all managers
@@ -55,8 +56,10 @@ bool game_engine::init()
 	m_physics = physics::INSTANCE();
 	printf("done!\n");
 
-	printf("SDL naf : %s\n", SDL_GetBasePath());
-
+	// init agent manager
+	printf("loading agent manager...");
+	m_agents = agent_manager::INSTANCE();
+	printf("done!\n");
 
 	return true;
 }
@@ -110,6 +113,7 @@ void game_engine::earlyUpdate()
 void game_engine::update()
 {
 	m_levels->update();
+	m_agents->update();
 }
 
 // reset the timer ready for next frame

@@ -15,6 +15,7 @@
 #include "inputs.h"
 #include "levels.h"
 #include "physics.h"
+#include "agent_manager.h"
 
 class game_engine
 {
@@ -32,6 +33,7 @@ class game_engine
 		inputs* m_inputs;
 		levels* m_levels;
 		physics* m_physics;
+		agent_manager* m_agents;
 
 		bool m_isRunning;
 
