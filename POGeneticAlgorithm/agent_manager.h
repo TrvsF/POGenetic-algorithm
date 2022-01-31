@@ -18,6 +18,8 @@ class agent_manager
 		const int SIM_STEPS = 5000;
 		int m_tickCounter;
 
+		void highlightTopFintess();
+
 		std::list<agent*> m_agents;
 
 	public:

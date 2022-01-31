@@ -168,6 +168,11 @@ void agent::handleGeneInputs()
 	}
 }
 
+void agent::shouldHighlight(bool flag)
+{
+	m_shouldHighligt = flag;
+}
+
 agent::agent(Vector2 position, goal* goal)
 {
 	pos(position);
@@ -182,6 +187,7 @@ agent::agent(Vector2 position, goal* goal)
 	m_boostIndex = 0;
 	m_canBoost = true;
 	m_hasBoosted = false;
+	m_shouldHighligt = false;
 	m_boostCooldownCount = 0;
 
 	m_simStep = -1;
@@ -253,4 +259,7 @@ void agent::update()
 void agent::render()
 {
 	renderTexture();
+
+	if (m_shouldHighligt)
+		drawDebugBB();
 }

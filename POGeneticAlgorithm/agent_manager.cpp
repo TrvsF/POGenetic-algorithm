@@ -2,6 +2,22 @@
 
 agent_manager* agent_manager::s_instance = NULL;
 
+void agent_manager::highlightTopFintess()
+{
+	agent* topPlace = new agent(VEC2_ONE, NULL);
+	float highestFitness = 0.0f;
+	for (auto const& agent : m_agents)
+	{
+		if (agent->getFitness() > highestFitness)
+		{
+			topPlace = agent;
+			highestFitness = agent->getFitness();
+		}
+	}
+	topPlace->shouldHighlight(true);
+	printf("fitness : %.5f\n", topPlace->getFitness());
+}
+
 agent_manager* agent_manager::INSTANCE()
 {
 	if (s_instance == NULL)
@@ -49,9 +65,10 @@ void agent_manager::update()
 {
 	m_tickCounter++;
 
-	if (m_tickCounter == 2000)
+	if (m_tickCounter == 2500)
 	{
 		printf("stopping test\n");
 		stopDebugTest();
+		highlightTopFintess();
 	}
 }
