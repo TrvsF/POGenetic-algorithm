@@ -12,13 +12,16 @@
 class genome
 {
 	private:
-		gene* m_genome[100000];
+		const int SIZE = 1000;
+
+		gene* m_genome[1000];
 
 	public:
 		genome();
 		~genome();
 
 		gene* getGeneAtIndex(int i);
+		void setGeneAtIndex(int i, gene* g);
 
 		void populate();
 };

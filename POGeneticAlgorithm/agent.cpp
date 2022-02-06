@@ -248,12 +248,6 @@ void agent::update()
 	m_boostIndex = 0;
 	m_tickVelocity = 0;
 	m_hasBoosted = false;
-
-	if (m_simStep == 5000) // debug stop switch
-	{
-		stopSimulation();
-		printf("fitness : %f\n", getFitness());
-	}
 }
 
 void agent::render()
