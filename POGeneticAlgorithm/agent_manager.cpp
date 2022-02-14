@@ -59,7 +59,6 @@ void agent_manager::doRouletteWheel()
 genome* agent_manager::getProbGene(std::list<std::pair<agent*, float>> agentProbMap, float prob)
 {
 	float tot = 0;
-	genome* gen;
 	for (auto const& agntPair : agentProbMap)
 	{
 		if (tot < prob && tot + agntPair.second >= prob)

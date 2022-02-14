@@ -175,7 +175,6 @@ void agent::shouldHighlight(bool flag)
 
 agent::agent(Vector2 position, goal* goal)
 {
-	m_startpos = position;
 	pos(position);
 
 	setTexture("enemy.png");
