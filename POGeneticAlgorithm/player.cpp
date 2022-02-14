@@ -7,7 +7,7 @@ player::player(Vector2 position)
 	m_inputs = inputs::INSTANCE();
 	m_camera = new camera();
 
-	m_camera->bb((int)position.x, (int)position.y, 120, 120);
+	m_camera->bb((int)position.x, (int)position.y, 400, 400);
 
 	setTexture("character.png");
 

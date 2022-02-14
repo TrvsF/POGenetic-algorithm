@@ -34,13 +34,26 @@ void agent_manager::doRouletteWheel()
 	sortedAgents.sort([](agent* lhs, agent* rhs) {return lhs->getFitness() < rhs->getFitness(); });
 	// add all to list of pairs
 	float tot = 0;
-	std::list<std::pair<agent*, float>> agentProbMap;
+	std::list<std::pair<agent*, float>> agentProbMap; // sorted lowest to highest
 	for (auto const& agnt : sortedAgents)
 	{
 		agentProbMap.push_back(std::make_pair(agnt, agnt->getFitness() / totalFitness));
 	}
+	int count = 0;
 	// TODO : FINISH
-	getProbGene(agentProbMap, randomFloat(0, 1));
+	for (auto const& agntPair : agentProbMap)
+	{
+		if (count > 70)
+		{
+			agntPair.first->gnome(getProbGene(agentProbMap, randomFloat(0, 1)));
+		}
+		else
+		{
+			agntPair.first->gnome(new genome());
+		}
+		count++;
+	}
+	startDebugTest();
 }
 
 genome* agent_manager::getProbGene(std::list<std::pair<agent*, float>> agentProbMap, float prob)
@@ -51,7 +64,6 @@ genome* agent_manager::getProbGene(std::list<std::pair<agent*, float>> agentProb
 	{
 		if (tot < prob && tot + agntPair.second >= prob)
 		{
-			printf("found with prob : %.4f", tot);
 			return agntPair.first->gnome();
 		}
 		tot += agntPair.second;
@@ -126,5 +138,6 @@ void agent_manager::update()
 		printf("stopping test\n");
 		stopDebugTest();
 		highlightTopFintess();
+		m_tickCounter = 0;
 	}
 }
