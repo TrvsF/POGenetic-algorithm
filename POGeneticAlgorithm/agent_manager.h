@@ -25,6 +25,7 @@ class agent_manager
 		void highlightTopFintess();
 
 		void doRouletteWheel();
+		genome* getProbGene(std::list<std::pair<agent*, float>> agentProbMap, float prob);
 		genome* getCrossoverGene(genome* g1, genome* g2, int crossoverpoint);
 
 		std::list<agent*> m_agents;

@@ -40,6 +40,23 @@ void agent_manager::doRouletteWheel()
 		agentProbMap.push_back(std::make_pair(agnt, agnt->getFitness() / totalFitness));
 	}
 	// TODO : FINISH
+	getProbGene(agentProbMap, randomFloat(0, 1));
+}
+
+genome* agent_manager::getProbGene(std::list<std::pair<agent*, float>> agentProbMap, float prob)
+{
+	float tot = 0;
+	genome* gen;
+	for (auto const& agntPair : agentProbMap)
+	{
+		if (tot < prob && tot + agntPair.second >= prob)
+		{
+			printf("found with prob : %.4f", tot);
+			return agntPair.first->gnome();
+		}
+		tot += agntPair.second;
+	}
+	return nullptr;
 }
 
 genome* agent_manager::getCrossoverGene(genome* g1, genome* g2, int crossoverpoint)
