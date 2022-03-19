@@ -50,7 +50,9 @@ class levels
 
 		player* m_playerChar;
 
-		texture* m_title;
+		const int DEBUG_LINES = 4;
+		std::string debugMessages[4];
+		texture* m_dLines[4];
 
 		goal* m_goal;
 		//------------------//

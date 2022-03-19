@@ -54,6 +54,8 @@ class agent : public game_entity
 		/*----------
 			GA
 		----------*/
+		Vector2 m_defaultPos;
+
 		bool m_shouldHighligt;
 		bool m_isSimming;
 		int m_simStep;
@@ -67,6 +69,8 @@ class agent : public game_entity
 	public:
 		agent(Vector2 position, goal* goal);
 		virtual ~agent();
+
+		void resetPos();
 
 		genome* gnome();
 		void gnome(genome* g);

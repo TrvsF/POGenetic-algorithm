@@ -176,6 +176,7 @@ void agent::shouldHighlight(bool flag)
 agent::agent(Vector2 position, goal* goal)
 {
 	pos(position);
+	m_defaultPos = position;
 
 	setTexture("enemy.png");
 
@@ -199,6 +200,12 @@ agent::agent(Vector2 position, goal* goal)
 
 agent::~agent()
 {
+}
+
+void agent::resetPos()
+{
+	pos(m_defaultPos);
+	setBB();
 }
 
 genome* agent::gnome()

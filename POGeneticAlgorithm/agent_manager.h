@@ -13,6 +13,7 @@
 #include <iostream>
 #include <map>
 #include <list>
+#include <string>
 
 class agent_manager
 {
@@ -21,6 +22,7 @@ class agent_manager
 
 		const long SIM_STEPS = 999;
 		int m_tickCounter;
+		int m_genCounter;
 
 		void highlightTopFintess();
 
@@ -30,6 +32,11 @@ class agent_manager
 
 		std::list<agent*> m_agents;
 
+		//debug info
+		float m_totalFitness;
+		float m_bestFitness;
+		int m_bestFitnessGen;
+
 	public:
 		static agent_manager* INSTANCE();
 
@@ -38,6 +45,9 @@ class agent_manager
 		void stopDebugTest();
 
 		const int POPULATION_MULTIPLYER = 10;
+		void getDebugData(std::string* str);
+
+		void resetPos();
 
 		agent_manager();
 		~agent_manager();

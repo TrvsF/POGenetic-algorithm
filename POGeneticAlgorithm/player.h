@@ -39,7 +39,6 @@ class player : public game_entity
 		// player handling
 		void playerInput();
 		void checkBoostCooldown();
-		void handleQuarterSteps();
 		void cancelBoost();
 
 		// movement methods

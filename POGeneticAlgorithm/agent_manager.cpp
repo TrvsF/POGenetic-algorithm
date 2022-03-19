@@ -24,11 +24,16 @@ void agent_manager::doRouletteWheel()
 	printf("------------------\n");
 	std::list<agent*> sortedAgents;
 	// get total fitness
-	float totalFitness = 0;
+	m_totalFitness = 0;
 	for (auto const& agnt : m_agents)
 	{
-		totalFitness += (float) agnt->getFitness();
+		m_totalFitness += (float) agnt->getFitness();
 		sortedAgents.push_back(agnt);
+	}
+	if (m_totalFitness > m_bestFitness)
+	{
+		m_bestFitnessGen = m_genCounter;
+		m_bestFitness = m_totalFitness;
 	}
 	// sort
 	sortedAgents.sort([](agent* lhs, agent* rhs) {return lhs->getFitness() < rhs->getFitness(); });
@@ -37,7 +42,7 @@ void agent_manager::doRouletteWheel()
 	std::list<std::pair<agent*, float>> agentProbMap; // sorted lowest to highest
 	for (auto const& agnt : sortedAgents)
 	{
-		agentProbMap.push_back(std::make_pair(agnt, agnt->getFitness() / totalFitness));
+		agentProbMap.push_back(std::make_pair(agnt, agnt->getFitness() / m_totalFitness));
 	}
 	int count = 0;
 	// TODO : FINISH
@@ -45,7 +50,7 @@ void agent_manager::doRouletteWheel()
 	{
 		if (count > 70)
 		{
-			agntPair.first->gnome(getProbGene(agentProbMap, randomFloat(0, 1)));
+			agntPair.first->gnome(getProbGene(agentProbMap, randomBinary()));
 		}
 		else
 		{
@@ -100,6 +105,8 @@ void agent_manager::addAgent(agent* agent)
 void agent_manager::startDebugTest()
 {
 	m_tickCounter = 0;
+	m_genCounter++;
+	resetPos();
 	for (auto const& agent : m_agents)
 	{
 		agent->beginSimulation();
@@ -115,8 +122,25 @@ void agent_manager::stopDebugTest()
 	}
 }
 
+void agent_manager::getDebugData(std::string* str)
+{
+	str[0] = "tick : " + std::to_string(m_tickCounter);
+	str[1] = "gen : " + std::to_string(m_genCounter);
+	str[2] = "tot fitness : " + std::to_string(m_totalFitness);
+	str[3] = "best fitness : " + std::to_string(m_bestFitness) + "|" + std::to_string(m_bestFitnessGen);
+}
+
+void agent_manager::resetPos()
+{
+	for (auto const& agent : m_agents)
+	{
+		agent->resetPos();
+	}
+}
+
 agent_manager::agent_manager()
 {
+	m_genCounter = 0;
 	m_tickCounter = 0;
 	/*
 		selection methods to add:

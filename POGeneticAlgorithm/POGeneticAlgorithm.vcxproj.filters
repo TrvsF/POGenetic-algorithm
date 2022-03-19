@@ -1,115 +1,144 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="game_entity.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="texture.cpp" />
-    <ClCompile Include="texture_helper.cpp" />
-    <ClCompile Include="wall.cpp" />
+    <ClCompile Include="gene.cpp">
+      <Filter>objects</Filter>
+    </ClCompile>
+    <ClCompile Include="genome.cpp">
+      <Filter>objects</Filter>
+    </ClCompile>
+    <ClCompile Include="texture.cpp">
+      <Filter>engine\managers</Filter>
+    </ClCompile>
+    <ClCompile Include="agent_manager.cpp">
+      <Filter>engine\managers</Filter>
+    </ClCompile>
     <ClCompile Include="assets.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
-    <ClCompile Include="timer.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
-    <ClCompile Include="physics.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
-    <ClCompile Include="levels.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
-    <ClCompile Include="inputs.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
-    <ClCompile Include="graphics.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
-    <ClCompile Include="camera.cpp">
-      <Filter>player</Filter>
-    </ClCompile>
-    <ClCompile Include="player.cpp">
-      <Filter>player</Filter>
+      <Filter>engine\managers</Filter>
     </ClCompile>
     <ClCompile Include="game_engine.cpp">
       <Filter>engine</Filter>
     </ClCompile>
+    <ClCompile Include="inputs.cpp">
+      <Filter>engine\managers</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics.cpp">
+      <Filter>engine\managers</Filter>
+    </ClCompile>
+    <ClCompile Include="levels.cpp">
+      <Filter>engine\managers</Filter>
+    </ClCompile>
+    <ClCompile Include="physics.cpp">
+      <Filter>engine\managers</Filter>
+    </ClCompile>
+    <ClCompile Include="timer.cpp">
+      <Filter>engine\managers</Filter>
+    </ClCompile>
+    <ClCompile Include="game_entity.cpp">
+      <Filter>engine\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="goal.cpp">
+      <Filter>engine\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="wall.cpp">
+      <Filter>engine\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>engine\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>engine\entities</Filter>
+    </ClCompile>
     <ClCompile Include="agent.cpp">
-      <Filter>galg</Filter>
+      <Filter>agent</Filter>
     </ClCompile>
-    <ClCompile Include="gene.cpp">
-      <Filter>galg</Filter>
+    <ClCompile Include="texture_helper.cpp">
+      <Filter>engine\helpers</Filter>
     </ClCompile>
-    <ClCompile Include="genome.cpp">
-      <Filter>galg</Filter>
-    </ClCompile>
-    <ClCompile Include="agent_manager.cpp">
-      <Filter>galg</Filter>
-    </ClCompile>
-    <ClCompile Include="goal.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="game_entity.h" />
-    <ClInclude Include="math_helper.h" />
-    <ClInclude Include="texture.h" />
-    <ClInclude Include="texture_helper.h" />
-    <ClInclude Include="wall.h" />
+    <ClInclude Include="gene.h">
+      <Filter>objects</Filter>
+    </ClInclude>
+    <ClInclude Include="genome.h">
+      <Filter>objects</Filter>
+    </ClInclude>
+    <ClInclude Include="texture.h">
+      <Filter>engine\managers</Filter>
+    </ClInclude>
+    <ClInclude Include="agent_manager.h">
+      <Filter>engine\managers</Filter>
+    </ClInclude>
     <ClInclude Include="assets.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="timer.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="physics.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="levels.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="inputs.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics.h">
-      <Filter>engine</Filter>
-    </ClInclude>
-    <ClInclude Include="camera.h">
-      <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="player.h">
-      <Filter>player</Filter>
+      <Filter>engine\managers</Filter>
     </ClInclude>
     <ClInclude Include="game_engine.h">
       <Filter>engine</Filter>
     </ClInclude>
+    <ClInclude Include="graphics.h">
+      <Filter>engine\managers</Filter>
+    </ClInclude>
+    <ClInclude Include="inputs.h">
+      <Filter>engine\managers</Filter>
+    </ClInclude>
+    <ClInclude Include="levels.h">
+      <Filter>engine\managers</Filter>
+    </ClInclude>
+    <ClInclude Include="physics.h">
+      <Filter>engine\managers</Filter>
+    </ClInclude>
+    <ClInclude Include="timer.h">
+      <Filter>engine\managers</Filter>
+    </ClInclude>
+    <ClInclude Include="game_entity.h">
+      <Filter>engine\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="wall.h">
+      <Filter>engine\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>engine\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>engine\entities</Filter>
+    </ClInclude>
     <ClInclude Include="agent.h">
-      <Filter>galg</Filter>
-    </ClInclude>
-    <ClInclude Include="gene.h">
-      <Filter>galg</Filter>
-    </ClInclude>
-    <ClInclude Include="genome.h">
-      <Filter>galg</Filter>
-    </ClInclude>
-    <ClInclude Include="agent_manager.h">
-      <Filter>galg</Filter>
+      <Filter>agent</Filter>
     </ClInclude>
     <ClInclude Include="goal.h">
-      <Filter>galg</Filter>
+      <Filter>engine\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="texture_helper.h">
+      <Filter>engine\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="math_helper.h">
+      <Filter>engine\helpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="engine">
       <UniqueIdentifier>{1a578184-f561-429e-a204-2947f1b6ef1f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="galg">
+    <Filter Include="engine\managers">
+      <UniqueIdentifier>{bb3d0fd1-684c-4181-9231-427ccfd143a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\entities">
+      <UniqueIdentifier>{1ff147fb-61e9-4440-b875-f87fd7ebdecd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="agent">
+      <UniqueIdentifier>{6a1ed5d4-1b2a-4fa8-a694-2b5f56eac570}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="objects">
       <UniqueIdentifier>{6361410c-eeb7-4b54-8dfd-a309f335b895}</UniqueIdentifier>
     </Filter>
-    <Filter Include="player">
-      <UniqueIdentifier>{6a1ed5d4-1b2a-4fa8-a694-2b5f56eac570}</UniqueIdentifier>
+    <Filter Include="engine\helpers">
+      <UniqueIdentifier>{a6d1b969-a0a2-4035-bda1-cddb65c2a732}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="character.png">
-      <Filter>player</Filter>
+      <Filter>engine\entities</Filter>
     </Image>
   </ItemGroup>
 </Project>

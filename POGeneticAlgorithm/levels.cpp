@@ -22,7 +22,7 @@ void levels::loadDefaultLevel()
 	// add player camera object
 	m_currentLevelObjects.push_back(new player(Vector2(400, 300)));
 
-	loadLevel("level2.pog");
+	loadLevel("debuglevel.pog");
 
 	agent_manager::INSTANCE()->startDebugTest();
 }
@@ -152,5 +152,11 @@ void levels::render()
 	for (auto const& texture : m_currentLevelTextures)
 	{
 		// TODO : make some sort of system to render in game textures that dont have a game object
+	}
+	agent_manager::INSTANCE()->getDebugData(debugMessages);
+	for (int i = 0; i < DEBUG_LINES; i++)
+	{
+		m_dLines[i] = new texture("terminus.ttf", debugMessages[i].c_str(), 21, { 0, 0, 0 });
+		m_dLines[i]->render(Vector2( 900, 20 + (i * 20) ), 0);
 	}
 }
