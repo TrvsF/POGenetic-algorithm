@@ -11,6 +11,10 @@ genome::~genome()
 
 gene* genome::getGeneAtIndex(int i)
 {
+	if (m_genome == NULL)
+	{
+		return NULL;
+	}
 	return m_genome[i];
 }
 

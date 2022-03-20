@@ -55,16 +55,13 @@ class agent : public game_entity
 			GA
 		----------*/
 		Vector2 m_defaultPos;
-
 		bool m_shouldHighligt;
-		bool m_isSimming;
-		int m_simStep;
 
 		timer* m_timer;
 		genome* m_genome;
 		goal* m_goal;
 
-		void handleGeneInputs();
+		bool handleGeneInputs(int tick);
 
 	public:
 		agent(Vector2 position, goal* goal);
@@ -75,13 +72,11 @@ class agent : public game_entity
 		genome* gnome();
 		void gnome(genome* g);
 
-		void beginSimulation();
-		void stopSimulation();
 		void shouldHighlight(bool flag);
 
 		float getFitness();
 
-		void update();
+		void update(int tick);
 		void render();
 };
 

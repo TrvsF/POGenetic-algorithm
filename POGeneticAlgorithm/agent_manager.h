@@ -17,36 +17,55 @@
 
 class agent_manager
 {
+	public:
+		enum class SimState { Inactive, Roullete, SomethingElse };
+
 	private:
 		static agent_manager* s_instance;
 
-		const long SIM_STEPS = 999;
-		int m_tickCounter;
-		int m_genCounter;
-
-		void highlightTopFintess();
-
-		void doRouletteWheel();
-		genome* getProbGene(std::list<std::pair<agent*, float>> agentProbMap, float prob);
-		genome* getCrossoverGene(genome* g1, genome* g2, int crossoverpoint);
-
 		std::list<agent*> m_agents;
 
-		//debug info
+		// ------------
+		// config stuff
+		bool m_isSimulating;
+		SimState m_state;
+		long m_ticksPerGen;
+
+		// ------------
+		// tracking stuff
+		int m_tickCounter;
+		int m_genCounter;
 		float m_totalFitness;
 		float m_bestFitness;
 		int m_bestFitnessGen;
 
+		void highlightTopFintess();
+
+		// ------------
+		// alg stuff 
+		// roulletee
+		void doRouletteWheel();
+		// general
+		void wakeAllAgents();
+		void wakeAgent(agent* a);
+		void sleepAllAgents();
+		void sleepAgent(agent* a);
+		genome* getProbGene(std::list<std::pair<agent*, float>> agentProbMap, float prob);
+		genome* getCrossoverGene(genome* g1, genome* g2, int crossoverpoint);
+
 	public:
 		static agent_manager* INSTANCE();
 
+		void state(SimState s);
+
 		void addAgent(agent* agent);
+
 		void startDebugTest();
 		void stopDebugTest();
 
 		const int POPULATION_MULTIPLYER = 10;
-		void getDebugData(std::string* str);
 
+		void getDebugData(std::string* str);
 		void resetPos();
 
 		agent_manager();

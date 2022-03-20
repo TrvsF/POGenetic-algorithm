@@ -138,9 +138,14 @@ void agent::movePlayer(Vector2 movementVec)
 	translate(movementVec);
 }
 
-void agent::handleGeneInputs()
+bool agent::handleGeneInputs(int tick)
 {
-	gene* tempGene = m_genome->getGeneAtIndex(m_simStep);
+	gene* tempGene = m_genome->getGeneAtIndex(tick);
+
+	if (tempGene == NULL)
+	{
+		return false;
+	}
 
 	if (tempGene->shouldMoveForward())
 	{
@@ -166,6 +171,8 @@ void agent::handleGeneInputs()
 	{
 		boost();
 	}
+
+	return true;
 }
 
 void agent::shouldHighlight(bool flag)
@@ -190,8 +197,6 @@ agent::agent(Vector2 position, goal* goal)
 	m_hasBoosted = false;
 	m_shouldHighligt = false;
 	m_boostCooldownCount = 0;
-
-	m_simStep = -1;
 
 	m_genome = new genome();
 
@@ -218,33 +223,23 @@ void agent::gnome(genome* g)
 	m_genome = g;
 }
 
-void agent::beginSimulation()
-{
-	m_simStep = 0;
-	m_isSimming = true;
-}
-
-void agent::stopSimulation()
-{
-	m_simStep = -1;
-	m_isSimming = false;
-}
-
 float agent::getFitness()
 {
 	float dtg = 1.0f / distnaceBetweenVecs(pos(), m_goal->pos());
 	return dtg; 
 }
 
-void agent::update()
+void agent::update(int tick)
 {
-	if (!m_isSimming)
+	if (!active())
 		return;
 
-	m_simStep++;
-
 	// does gene inputs
-	handleGeneInputs();
+	if (!handleGeneInputs(tick))
+	{
+		printf("\n\nERROR HANDLING GENES IN AGENT\n\n");
+		return;
+	}
 
 	// check the boost cooldown meter
 	checkBoostCooldown();

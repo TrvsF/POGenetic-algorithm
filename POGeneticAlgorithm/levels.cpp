@@ -137,10 +137,7 @@ void levels::resetLevel()
 
 void levels::update()
 {
-	for (auto const& entity : m_currentLevelObjects)
-	{
-		entity->update();
-	}
+	
 }
 
 void levels::render()

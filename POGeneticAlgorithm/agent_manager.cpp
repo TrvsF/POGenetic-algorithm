@@ -61,6 +61,32 @@ void agent_manager::doRouletteWheel()
 	startDebugTest();
 }
 
+void agent_manager::wakeAllAgents()
+{
+	for (auto const& agent : m_agents)
+	{
+		agent->active(true);
+	}
+}
+
+void agent_manager::wakeAgent(agent * a)
+{
+	a->active(true);
+}
+
+void agent_manager::sleepAllAgents()
+{
+	for (auto const& agent : m_agents)
+	{
+		agent->active(false);
+	}
+}
+
+void agent_manager::sleepAgent(agent * a)
+{
+	a->active(false);
+}
+
 genome* agent_manager::getProbGene(std::list<std::pair<agent*, float>> agentProbMap, float prob)
 {
 	float tot = 0;
@@ -97,6 +123,11 @@ agent_manager* agent_manager::INSTANCE()
 	return s_instance;
 }
 
+void agent_manager::state(SimState s)
+{
+	m_state = s;
+}
+
 void agent_manager::addAgent(agent* agent)
 {
 	m_agents.push_back(agent);
@@ -104,22 +135,18 @@ void agent_manager::addAgent(agent* agent)
 
 void agent_manager::startDebugTest()
 {
+	m_state = SimState::Roullete;
 	m_tickCounter = 0;
+	m_ticksPerGen = 999;
 	m_genCounter++;
 	resetPos();
-	for (auto const& agent : m_agents)
-	{
-		agent->beginSimulation();
-	}
+	wakeAllAgents();
 }
 
 void agent_manager::stopDebugTest()
 {
-	for (auto const& agent : m_agents)
-	{
-		agent->stopSimulation();
-		printf("fitness : %.5f\n", agent->getFitness());
-	}
+	m_state = SimState::Inactive;
+	sleepAllAgents();
 }
 
 void agent_manager::getDebugData(std::string* str)
@@ -142,6 +169,7 @@ agent_manager::agent_manager()
 {
 	m_genCounter = 0;
 	m_tickCounter = 0;
+	m_state = SimState::Inactive;
 	/*
 		selection methods to add:
 		- https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)#Boltzmann_Selection
@@ -154,13 +182,26 @@ agent_manager::~agent_manager()
 
 void agent_manager::update()
 {
-	m_tickCounter++;
-
-	if (m_tickCounter == SIM_STEPS)
+	switch (m_state)
 	{
-		printf("stopping test\n");
-		stopDebugTest();
-		highlightTopFintess();
-		m_tickCounter = 0;
+		case SimState::Inactive:
+			return;
+		case SimState::Roullete:
+			m_tickCounter++;
+
+			if (m_tickCounter >= m_ticksPerGen)
+			{
+				printf("stopping test\n");
+				stopDebugTest();
+				highlightTopFintess();
+				m_tickCounter = 0;
+			}
+
+			break;
 	}
+	for (auto const& agent : m_agents)
+	{
+		agent->update(m_tickCounter);
+	}
+
 }
