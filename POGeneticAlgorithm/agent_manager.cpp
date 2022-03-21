@@ -4,7 +4,12 @@ agent_manager* agent_manager::s_instance = NULL;
 
 void agent_manager::highlightTopFintess()
 {
-	agent* topPlace = new agent(VEC2_ONE, NULL);
+	for (auto const& agent : m_agents)
+	{
+		agent->shouldHighlight(false);
+	}
+
+	agent* topPlace = NULL;
 	float highestFitness = 0.0f;
 	for (auto const& agent : m_agents)
 	{
@@ -14,51 +19,85 @@ void agent_manager::highlightTopFintess()
 			highestFitness = agent->getFitness();
 		}
 	}
-	topPlace->shouldHighlight(true);
-	printf("top fitness : %.5f\n", topPlace->getFitness());
-	doRouletteWheel();
+	if (topPlace != NULL)
+	{
+		topPlace->shouldHighlight(true);
+	}
 }
 
 void agent_manager::doRouletteWheel()
 {
-	printf("------------------\n");
+	// list of sorted agents
 	std::list<agent*> sortedAgents;
-	// get total fitness
+
+	// get total fitness of population
 	m_totalFitness = 0;
 	for (auto const& agnt : m_agents)
 	{
 		m_totalFitness += (float) agnt->getFitness();
 		sortedAgents.push_back(agnt);
 	}
+
+	// menu stuff
 	if (m_totalFitness > m_bestFitness)
 	{
 		m_bestFitnessGen = m_genCounter;
 		m_bestFitness = m_totalFitness;
 	}
-	// sort
+
+
+	// sort the agents by fitness
 	sortedAgents.sort([](agent* lhs, agent* rhs) {return lhs->getFitness() < rhs->getFitness(); });
-	// add all to list of pairs
+
+	// add agents along with their fitness/total fitness to a pairmap
 	float tot = 0;
 	std::list<std::pair<agent*, float>> agentProbMap; // sorted lowest to highest
 	for (auto const& agnt : sortedAgents)
 	{
 		agentProbMap.push_back(std::make_pair(agnt, agnt->getFitness() / m_totalFitness));
 	}
+
+	// roll 6 times and select 6 agents to stay as is
+	int keepGenomes = 6;
+	int mutateGenomes = 6;
+	int generatedGenomes = static_cast<int>(m_agents.size()) - (keepGenomes + mutateGenomes);
+
+	// TODO : 
+	// keep track of list and keep/mutate some while randomising others
+	// is done OK below but can be done better im just too sleepy atm ://
+
+	// new list of agents for the next generation
+	std::vector<genome*> newGenomes;
 	int count = 0;
-	// TODO : FINISH
-	for (auto const& agntPair : agentProbMap)
+
+	// pick agents to go to next gen unalterd
+	for (int i = 0; i < keepGenomes; i++)
 	{
-		if (count > 70)
-		{
-			agntPair.first->gnome(getProbGene(agentProbMap, randomBinary()));
-		}
-		else
-		{
-			agntPair.first->gnome(new genome());
-		}
+		newGenomes.push_back(getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)));
 		count++;
 	}
-	startDebugTest();
+
+	for (int i = 0; i < mutateGenomes; i++)
+	{
+		newGenomes.push_back(getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)));
+		count++;
+	}
+
+	for (int i = 0; i < generatedGenomes; i++)
+	{
+		newGenomes.push_back(new genome());
+		count++;
+	}
+
+	count = 0;
+	for (auto const& agent : m_agents)
+	{
+		agent->gnome(newGenomes[count]);
+		count++;
+	}
+
+	agentProbMap.clear();
+	sortedAgents.clear();
 }
 
 void agent_manager::wakeAllAgents()
@@ -87,18 +126,18 @@ void agent_manager::sleepAgent(agent * a)
 	a->active(false);
 }
 
-genome* agent_manager::getProbGene(std::list<std::pair<agent*, float>> agentProbMap, float prob)
+genome* agent_manager::getGenomeFromProbMap(std::list<std::pair<agent*, float>> agentProbMap, float prob)
 {
 	float tot = 0;
-	for (auto const& agntPair : agentProbMap)
+	for (auto const& agentPair : agentProbMap)
 	{
-		if (tot < prob && tot + agntPair.second >= prob)
+		if (prob <= tot)
 		{
-			return agntPair.first->gnome();
+			return agentPair.first->gnome();
 		}
-		tot += agntPair.second;
+		tot += agentPair.second;
 	}
-	return nullptr;
+	return NULL;
 }
 
 genome* agent_manager::getCrossoverGene(genome* g1, genome* g2, int crossoverpoint)
@@ -187,21 +226,19 @@ void agent_manager::update()
 		case SimState::Inactive:
 			return;
 		case SimState::Roullete:
+			for (auto const& agent : m_agents)
+			{
+				agent->update(m_tickCounter);
+			}
 			m_tickCounter++;
-
 			if (m_tickCounter >= m_ticksPerGen)
 			{
-				printf("stopping test\n");
 				stopDebugTest();
 				highlightTopFintess();
-				m_tickCounter = 0;
+				doRouletteWheel();
+				startDebugTest();
 			}
-
 			break;
 	}
-	for (auto const& agent : m_agents)
-	{
-		agent->update(m_tickCounter);
-	}
-
+	
 }

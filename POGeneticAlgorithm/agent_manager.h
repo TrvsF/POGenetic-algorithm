@@ -13,6 +13,7 @@
 #include <iostream>
 #include <map>
 #include <list>
+#include <vector>
 #include <string>
 
 class agent_manager
@@ -33,6 +34,7 @@ class agent_manager
 
 		// ------------
 		// tracking stuff
+		int m_populationSize;
 		int m_tickCounter;
 		int m_genCounter;
 		float m_totalFitness;
@@ -50,7 +52,7 @@ class agent_manager
 		void wakeAgent(agent* a);
 		void sleepAllAgents();
 		void sleepAgent(agent* a);
-		genome* getProbGene(std::list<std::pair<agent*, float>> agentProbMap, float prob);
+		genome* getGenomeFromProbMap(std::list<std::pair<agent*, float>> agentProbMap, float prob);
 		genome* getCrossoverGene(genome* g1, genome* g2, int crossoverpoint);
 
 	public:
