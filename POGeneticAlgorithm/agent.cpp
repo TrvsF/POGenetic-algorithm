@@ -142,6 +142,8 @@ bool agent::handleGeneInputs(int tick)
 {
 	gene* tempGene = m_genome->getGeneAtIndex(tick);
 
+	printf("all good\n");
+
 	if (tempGene == NULL)
 	{
 		return false;

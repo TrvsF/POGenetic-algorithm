@@ -59,7 +59,7 @@ void agent_manager::doRouletteWheel()
 
 	// roll 6 times and select 6 agents to stay as is
 	int keepGenomes = 6;
-	int mutateGenomes = 6;
+	int mutateGenomes = 0;
 	int generatedGenomes = static_cast<int>(m_agents.size()) - (keepGenomes + mutateGenomes);
 
 	// TODO : 
@@ -98,6 +98,8 @@ void agent_manager::doRouletteWheel()
 
 	agentProbMap.clear();
 	sortedAgents.clear();
+
+	printf("done\n");
 }
 
 void agent_manager::wakeAllAgents()
@@ -128,6 +130,7 @@ void agent_manager::sleepAgent(agent * a)
 
 genome* agent_manager::getGenomeFromProbMap(std::list<std::pair<agent*, float>> agentProbMap, float prob)
 {
+	// TODO : FIX BUG WHERE IF 2 OF SAME IS CHOSEN IT BREAKES
 	float tot = 0;
 	for (auto const& agentPair : agentProbMap)
 	{
