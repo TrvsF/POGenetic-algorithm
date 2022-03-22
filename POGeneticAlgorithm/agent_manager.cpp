@@ -98,6 +98,7 @@ void agent_manager::doRouletteWheel()
 
 	agentProbMap.clear();
 	sortedAgents.clear();
+	m_alreadyUsedGenomes.clear();
 
 	printf("done\n");
 }
@@ -130,17 +131,26 @@ void agent_manager::sleepAgent(agent * a)
 
 genome* agent_manager::getGenomeFromProbMap(std::list<std::pair<agent*, float>> agentProbMap, float prob)
 {
-	// TODO : FIX BUG WHERE IF 2 OF SAME IS CHOSEN IT BREAKES
 	float tot = 0;
+	genome* newG = new genome();
 	for (auto const& agentPair : agentProbMap)
 	{
 		if (prob <= tot)
 		{
+			// checks if genome has already been assigned, if so try again
+			for (auto const& gnome : m_alreadyUsedGenomes)
+			{
+				if (gnome == agentPair.first->gnome())
+				{
+					return getGenomeFromProbMap(agentProbMap, randomFloat(0, 1));
+				}
+			}
+			m_alreadyUsedGenomes.push_back(agentPair.first->gnome());
 			return agentPair.first->gnome();
 		}
 		tot += agentPair.second;
 	}
-	return NULL;
+	return newG;
 }
 
 genome* agent_manager::getCrossoverGene(genome* g1, genome* g2, int crossoverpoint)

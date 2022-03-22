@@ -15,6 +15,7 @@
 #include <list>
 #include <vector>
 #include <string>
+#include <utility>
 
 class agent_manager
 {
@@ -25,6 +26,8 @@ class agent_manager
 		static agent_manager* s_instance;
 
 		std::list<agent*> m_agents;
+
+		std::list<genome*> m_alreadyUsedGenomes;
 
 		// ------------
 		// config stuff

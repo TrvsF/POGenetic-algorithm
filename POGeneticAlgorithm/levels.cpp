@@ -154,6 +154,6 @@ void levels::render()
 	for (int i = 0; i < DEBUG_LINES; i++)
 	{
 		m_dLines[i] = new texture("terminus.ttf", debugMessages[i].c_str(), 21, { 0, 0, 0 });
-		m_dLines[i]->render(Vector2( 900, 20 + (i * 20) ), 0);
+		m_dLines[i]->render(Vector2( (float) 900, (float) 20 + (i * 20) ), 0);
 	}
 }
