@@ -62,10 +62,6 @@ void agent_manager::doRouletteWheel()
 	int mutateGenomes = 0;
 	int generatedGenomes = static_cast<int>(m_agents.size()) - (keepGenomes + mutateGenomes);
 
-	// TODO : 
-	// keep track of list and keep/mutate some while randomising others
-	// is done OK below but can be done better im just too sleepy atm ://
-
 	// new list of agents for the next generation
 	std::vector<genome*> newGenomes;
 	int count = 0;
