@@ -184,9 +184,12 @@ void agent_manager::addAgent(agent* agent)
 void agent_manager::startDebugTest()
 {
 	m_state = SimState::Roullete;
+	m_isSimulating = true;
+
 	m_tickCounter = 0;
 	m_ticksPerGen = 999;
 	m_genCounter++;
+
 	resetPos();
 	wakeAllAgents();
 }
@@ -194,6 +197,8 @@ void agent_manager::startDebugTest()
 void agent_manager::stopDebugTest()
 {
 	m_state = SimState::Inactive;
+	m_isSimulating = false;
+
 	sleepAllAgents();
 }
 
@@ -213,11 +218,23 @@ void agent_manager::resetPos()
 	}
 }
 
+void agent_manager::pauseResume()
+{
+	m_isSimulating = !m_isSimulating;
+	printf("%d\n", m_isSimulating);
+}
+
 agent_manager::agent_manager()
 {
 	m_genCounter = 0;
 	m_tickCounter = 0;
 	m_state = SimState::Inactive;
+	m_bestFitness = 0;
+	m_bestFitnessGen = 0;
+	m_isSimulating = false;
+	m_populationSize = 0;
+	m_ticksPerGen = 0;
+	m_totalFitness = 0;
 	/*
 		selection methods to add:
 		- https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)#Boltzmann_Selection
@@ -235,11 +252,16 @@ void agent_manager::update()
 		case SimState::Inactive:
 			return;
 		case SimState::Roullete:
+			if (!m_isSimulating)
+				return;
+
 			for (auto const& agent : m_agents)
 			{
 				agent->update(m_tickCounter);
 			}
+
 			m_tickCounter++;
+
 			if (m_tickCounter >= m_ticksPerGen)
 			{
 				stopDebugTest();
@@ -247,6 +269,7 @@ void agent_manager::update()
 				doRouletteWheel();
 				startDebugTest();
 			}
+
 			break;
 	}
 	

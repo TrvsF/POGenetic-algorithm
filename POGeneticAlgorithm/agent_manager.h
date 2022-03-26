@@ -73,6 +73,9 @@ class agent_manager
 		void getDebugData(std::string* str);
 		void resetPos();
 
+		// user input
+		void pauseResume();
+
 		agent_manager();
 		~agent_manager();
 

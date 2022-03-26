@@ -20,7 +20,8 @@ void levels::loadDefaultLevel()
 	m_currentLevelObjects.push_back(m_goal);
 
 	// add player camera object
-	m_currentLevelObjects.push_back(new player(Vector2(400, 300)));
+	m_playerChar = new player(Vector2(400, 300));
+	m_currentLevelObjects.push_back(m_playerChar);
 
 	loadLevel("debuglevel.pog");
 
@@ -137,7 +138,7 @@ void levels::resetLevel()
 
 void levels::update()
 {
-	
+	m_playerChar->update();
 }
 
 void levels::render()

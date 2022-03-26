@@ -44,7 +44,7 @@ void player::playerInput()
 	}
 	if (m_inputs->keyPressed(SDL_SCANCODE_SPACE))
 	{
-		boost();
+		agent_manager::INSTANCE()->pauseResume();
 	}
 }
 

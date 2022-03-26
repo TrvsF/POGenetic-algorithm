@@ -12,6 +12,7 @@
 #include "inputs.h"
 #include "physics.h"
 #include "camera.h"
+#include "agent_manager.h"
 #include <iostream>
 
 class player : public game_entity
