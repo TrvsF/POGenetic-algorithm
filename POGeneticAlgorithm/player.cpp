@@ -46,6 +46,10 @@ void player::playerInput()
 	{
 		agent_manager::INSTANCE()->pauseResume();
 	}
+	if (m_inputs->mouseButtonPressed(inputs::left))
+	{
+		agent_manager::INSTANCE()->onClick(m_inputs->mousePos());
+	}
 }
 
 void player::checkBoostCooldown()

@@ -224,6 +224,25 @@ void agent_manager::pauseResume()
 	printf("%d\n", m_isSimulating);
 }
 
+void agent_manager::onClick(Vector2 mousePos)
+{
+	for (auto const& agent : m_agents)
+	{
+		BoundingBox agentBB = agent->bb();
+		if ((mousePos.y < agentBB.top && mousePos.y > agentBB.bottom) && (mousePos.x < agentBB.left && mousePos.x > agentBB.right))
+		{
+			m_trackedAgent = agent;
+			return;
+		}
+	}
+	m_trackedAgent = NULL;
+}
+
+agent* agent_manager::getAgentData()
+{
+	return m_trackedAgent;
+}
+
 agent_manager::agent_manager()
 {
 	m_genCounter = 0;
@@ -235,6 +254,7 @@ agent_manager::agent_manager()
 	m_populationSize = 0;
 	m_ticksPerGen = 0;
 	m_totalFitness = 0;
+	m_trackedAgent = NULL;
 	/*
 		selection methods to add:
 		- https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)#Boltzmann_Selection

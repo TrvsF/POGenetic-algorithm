@@ -76,6 +76,8 @@ class agent : public game_entity
 
 		float getFitness();
 
+		std::string getGeneString();
+
 		void update(int tick);
 		void render();
 };

@@ -229,6 +229,11 @@ float agent::getFitness()
 	return dtg; 
 }
 
+std::string agent::getGeneString()
+{
+	return std::string("hello world");
+}
+
 void agent::update(int tick)
 {
 	if (!active())

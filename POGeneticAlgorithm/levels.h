@@ -54,6 +54,14 @@ class levels
 		std::string debugMessages[4];
 		texture* m_dLines[4];
 
+		bool m_isShowingAgentInfo;
+		agent* m_agentInfoObj;
+		Vector2 m_agentInfoPos;
+		std::string m_agentInfoStr;
+		texture* m_agentLineTex;
+
+		void updateAgentInfo();
+
 		goal* m_goal;
 		//------------------//
 
@@ -62,6 +70,8 @@ class levels
 
 		void loadDefaultLevel();
 		bool loadLevel(std::string fileName);
+
+		void getAgentInfo(agent* agent);
 
 		void update();
 		void render();

@@ -8,29 +8,48 @@
 #define _INPUTS_H
 
 #include <SDL.h>
+#include "math_helper.h"
 
 class inputs
 {
-	private:
-		static inputs* s_instance;
+private:
+	static inputs* s_instance;
 
-		const Uint8* m_keyboardStates;
-		Uint8* m_prevKeyboardStates;
-		int m_keyLength;
+	const Uint8* m_keyboardStates;
+	Uint8* m_prevKeyboardStates;
+	int m_keyLength;
 
-		void copyToPrev();
+	Uint32 m_prevMouseState;
+	Uint32 m_mouseState;
 
-		inputs();
-		~inputs();
+	int m_mouseX;
+	int m_mouseY;
 
-	public:
-		static inputs* INSTANCE();
+	void copyToPrev();
 
-		bool keyDown(SDL_Scancode scanCode);
-		bool keyPressed(SDL_Scancode scanCode);
-		bool keyReleased(SDL_Scancode scanCode);
+	inputs();
+	~inputs();
 
-		void update();
-		void updatePrev();
+public:
+	enum e_mouseButton {
+		left, right, middle, back, forward
+	};
+
+	static inputs* INSTANCE();
+
+	// keyboard
+	bool keyDown(SDL_Scancode scanCode);
+	bool keyPressed(SDL_Scancode scanCode);
+	bool keyReleased(SDL_Scancode scanCode);
+
+	// mouse
+	bool mouseButtonDown(e_mouseButton button);
+	bool mouseButtonPressed(e_mouseButton button);
+	bool mouseButtonReleased(e_mouseButton button);
+
+	Vector2 mousePos();
+
+	void update();
+	void updatePrev();
 };
 #endif

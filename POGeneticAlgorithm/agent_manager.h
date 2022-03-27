@@ -30,6 +30,10 @@ class agent_manager
 		std::list<genome*> m_alreadyUsedGenomes;
 
 		// ------------
+		// agent tracker
+		agent* m_trackedAgent;
+
+		// ------------
 		// config stuff
 		bool m_isSimulating;
 		SimState m_state;
@@ -75,6 +79,8 @@ class agent_manager
 
 		// user input
 		void pauseResume();
+		void onClick(Vector2 mousePos);
+		agent* getAgentData();
 
 		agent_manager();
 		~agent_manager();

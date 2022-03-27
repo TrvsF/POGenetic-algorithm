@@ -2,6 +2,12 @@
 
 levels* levels::s_instance = NULL;
 
+void levels::updateAgentInfo()
+{
+	m_agentInfoPos = m_agentInfoObj->pos() + Vector2(50, 10);
+	m_agentInfoStr = m_agentInfoObj->getGeneString();
+}
+
 levels* levels::INSTANCE()
 {
 	if (s_instance == NULL)
@@ -118,9 +124,18 @@ bool levels::loadLevel(std::string fileName)
 	return true;
 }
 
+void levels::getAgentInfo(agent* agent)
+{
+	
+}
+
 levels::levels()
 {
 	loadDefaultLevel();
+
+	m_agentInfoPos = VEC2_ZERO;
+	m_agentInfoStr = "HELLO WORLD";
+	m_isShowingAgentInfo = false;
 }
 
 levels::~levels()
@@ -139,6 +154,17 @@ void levels::resetLevel()
 void levels::update()
 {
 	m_playerChar->update();
+
+	agent* agnt = agent_manager::INSTANCE()->getAgentData();
+	if (agnt == NULL)
+	{
+		m_agentInfoPos = VEC2_ZERO;
+		m_agentInfoStr = " ";
+		return;
+	}
+
+	m_agentInfoObj = agnt;
+	updateAgentInfo();
 }
 
 void levels::render()
@@ -157,4 +183,7 @@ void levels::render()
 		m_dLines[i] = new texture("terminus.ttf", debugMessages[i].c_str(), 21, { 0, 0, 0 });
 		m_dLines[i]->render(Vector2( (float) 900, (float) 20 + (i * 20) ), 0);
 	}
+ 
+	m_agentLineTex = new texture("terminus.ttf", m_agentInfoStr.c_str(), 21, { 0, 0, 0 });
+	m_agentLineTex->render(m_agentInfoPos, 0);
 }
