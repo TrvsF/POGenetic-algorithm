@@ -62,6 +62,7 @@ class agent : public game_entity
 		goal* m_goal;
 
 		bool handleGeneInputs(int tick);
+		int m_tick;
 
 	public:
 		agent(Vector2 position, goal* goal);

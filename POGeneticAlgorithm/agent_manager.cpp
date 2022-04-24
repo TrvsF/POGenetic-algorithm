@@ -75,7 +75,8 @@ void agent_manager::doRouletteWheel()
 
 	for (int i = 0; i < mutateGenomes; i++)
 	{
-		newGenomes.push_back(getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)));
+		newGenomes.push_back(getCrossoverGene(getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), randomInt(0, 1000)));
+		// newGenomes.push_back(getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)));
 		count++;
 	}
 

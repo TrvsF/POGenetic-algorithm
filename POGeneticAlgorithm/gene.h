@@ -8,6 +8,7 @@
 #define _GENE_H
 
 #include "math_helper.h"
+#include <string>
 
 class gene
 {
@@ -24,6 +25,8 @@ class gene
 		bool shouldTurnRight();
 		bool shouldTrunLeft();
 		bool shouldBoost();
+
+		std::string getAsString();
 };
 
 #endif

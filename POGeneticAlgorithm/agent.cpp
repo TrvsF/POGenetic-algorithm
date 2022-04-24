@@ -231,13 +231,15 @@ float agent::getFitness()
 
 std::string agent::getGeneString()
 {
-	return std::string("hello world");
+	return m_genome->getGeneAtIndex(m_tick)->getAsString();
 }
 
 void agent::update(int tick)
 {
 	if (!active())
 		return;
+
+	m_tick = tick;
 
 	// does gene inputs
 	if (!handleGeneInputs(tick))

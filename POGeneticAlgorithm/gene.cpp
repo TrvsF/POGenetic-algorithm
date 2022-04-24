@@ -45,3 +45,13 @@ bool gene::shouldBoost()
 {
 	return m_gene[4];
 }
+
+std::string gene::getAsString()
+{
+	std::string rString = "";
+	for (int i = 0; i < 5; i++)
+	{
+		rString += std::to_string(m_gene[i]);
+	}
+	return rString;
+}
