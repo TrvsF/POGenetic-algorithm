@@ -16,27 +16,26 @@
 #include <vector>
 #include <string>
 #include <utility>
+#include <fstream>
 
 class agent_manager
 {
-	public:
-		enum class SimState { Inactive, Roullete, SomethingElse };
-
 	private:
 		static agent_manager* s_instance;
 
 		std::list<agent*> m_agents;
+		std::list<agent*> m_agents2;
 
 		std::list<genome*> m_alreadyUsedGenomes;
 
 		// ------------
-		// agent tracker
+		// agent stuff
+		bool m_agentFlip;
 		agent* m_trackedAgent;
 
 		// ------------
 		// config stuff
 		bool m_isSimulating;
-		SimState m_state;
 		long m_ticksPerGen;
 
 		// ------------
@@ -61,18 +60,17 @@ class agent_manager
 		void sleepAgent(agent* a);
 		genome* getGenomeFromProbMap(std::list<std::pair<agent*, float>> agentProbMap, float prob);
 		genome* getCrossoverGene(genome* g1, genome* g2, int crossoverpoint);
+		void saveAgentInfo(std::list<agent*> sortedAgents);
 
 	public:
 		static agent_manager* INSTANCE();
-
-		void state(SimState s);
 
 		void addAgent(agent* agent);
 
 		void startDebugTest();
 		void stopDebugTest();
 
-		const int POPULATION_MULTIPLYER = 10;
+		const int POPULATION_MULTIPLYER = 15;
 
 		void getDebugData(std::string* str);
 		void resetPos();

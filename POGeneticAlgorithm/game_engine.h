@@ -21,7 +21,7 @@ class game_engine
 {
 	private:
 		const int FRAME_RATE = 144;
-		const int PHYS_RATE = 150;
+		const int PHYS_RATE = 250;
 
 		SDL_Event m_events;
 
