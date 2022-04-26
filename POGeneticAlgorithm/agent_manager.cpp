@@ -25,24 +25,24 @@ void agent_manager::highlightTopFintess()
 	}
 }
 
-void agent_manager::doRouletteWheel()
+void agent_manager::doBolzmann()
 {
 	// list of sorted agents
 	std::list<agent*> sortedAgents;
 
 	// get total fitness of population
-	m_totalFitness = 0;
-	for (auto const& agnt : m_agents)
+	float totalFitness = 0;
+	for (auto const& agnt : m_agents2)
 	{
-		m_totalFitness += (float) agnt->getFitness();
+		totalFitness += (float)agnt->getFitness();
 		sortedAgents.push_back(agnt);
 	}
 
 	// menu stuff
-	if (m_totalFitness > m_bestFitness)
+	if (totalFitness > m_bestFitness2)
 	{
-		m_bestFitnessGen = m_genCounter;
-		m_bestFitness = m_totalFitness;
+		m_bestFitnessGen2 = m_genCounter;
+		m_bestFitness2 = totalFitness;
 	}
 
 	// sort the agents by fitness
@@ -53,16 +53,55 @@ void agent_manager::doRouletteWheel()
 	std::list<std::pair<agent*, float>> agentProbMap; // sorted lowest to highest
 	for (auto const& agnt : sortedAgents)
 	{
-		agentProbMap.push_back(std::make_pair(agnt, agnt->getFitness() / m_totalFitness));
+		agentProbMap.push_back(std::make_pair(agnt, agnt->getFitness() / totalFitness));
 	}
 
 	// save info of agents to file
-	saveAgentInfo(sortedAgents);
+	saveAgentInfo(sortedAgents, totalFitness, 1);
+
+	m_temp = 0;
+	printf("fitness %f\ntemp %f\n", totalFitness, m_temp);
+}
+
+void agent_manager::doRouletteWheel()
+{
+	// list of sorted agents
+	std::list<agent*> sortedAgents;
+
+	// get total fitness of population
+	float totalFitness = 0;
+	for (auto const& agnt : m_agents)
+	{
+		totalFitness += (float) agnt->getFitness();
+		sortedAgents.push_back(agnt);
+	}
+
+	// menu stuff
+	if (totalFitness > m_bestFitness)
+	{
+		m_bestFitnessGen = m_genCounter;
+		m_bestFitness = totalFitness;
+	}
+
+	// sort the agents by fitness
+	sortedAgents.sort([](agent* lhs, agent* rhs) {return lhs->getFitness() < rhs->getFitness(); });
+
+	// add agents along with their fitness/total fitness to a pairmap
+	float tot = 0;
+	std::list<std::pair<agent*, float>> agentProbMap; // sorted lowest to highest
+	for (auto const& agnt : sortedAgents)
+	{
+		agentProbMap.push_back(std::make_pair(agnt, agnt->getFitness() / totalFitness));
+	}
+
+	// save info of agents to file
+	saveAgentInfo(sortedAgents, totalFitness, 0);
 
 	// roll 6 times and select 6 agents to stay as is
 	int keepGenomes = 5;
-	int mutateGenomes = 10;
-	int generatedGenomes = m_agents.size() - (keepGenomes + mutateGenomes);
+	int mutateGenomes = 5;
+	int mutateRandGeneomes = 5;
+	int generatedGenomes = m_agents.size() - (keepGenomes + mutateGenomes + mutateRandGeneomes);
 
 	// new list of agents for the next generation
 	std::vector<genome*> newGenomes;
@@ -78,7 +117,13 @@ void agent_manager::doRouletteWheel()
 	// pick 2 agents to mutate
 	for (int i = 0; i < mutateGenomes; i++)
 	{
-		newGenomes.push_back(getCrossoverGene(getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), randomInt(0, 1000)));
+		newGenomes.push_back(getCrossoverGenes(getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), randomInt(0, 1000)));
+		count++;
+	}
+
+	for (int i = 0; i < mutateRandGeneomes; i++)
+	{
+		newGenomes.push_back(getCrossoverGene(getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), randomInt(0, 1000)));
 		count++;
 	}
 
@@ -156,7 +201,9 @@ genome* agent_manager::getGenomeFromProbMap(std::list<std::pair<agent*, float>> 
 	return new genome();
 }
 
-genome* agent_manager::getCrossoverGene(genome* g1, genome* g2, int crossoverpoint)
+// takes 2 parent genes and a corssover point
+// outputs new gene with parent genes
+genome* agent_manager::getCrossoverGenes(genome* g1, genome* g2, int crossoverpoint)
 {
 	genome* newG = new genome();
 	genome* activeG = g1;
@@ -170,13 +217,34 @@ genome* agent_manager::getCrossoverGene(genome* g1, genome* g2, int crossoverpoi
 	return newG;
 }
 
-void agent_manager::saveAgentInfo(std::list<agent*> sortedAgents)
+// takes in 1 parent gene and a crossover point
+// outputs new gene with parent gene and random genes
+genome * agent_manager::getCrossoverGene(genome * g, int corssoverpoint)
+{
+	genome* newG = new genome();
+	bool isFromGene = randomBinary();
+	for (int i = 100; i < 1000; i++)
+	{
+		if (i == corssoverpoint)
+			isFromGene = false;
+
+		if (isFromGene)
+			newG->setGeneAtIndex(i, g->getGeneAtIndex(i));
+		else
+			newG->setGeneAtIndex(i, new gene());
+
+	}
+	return newG;
+}
+
+void agent_manager::saveAgentInfo(std::list<agent*> sortedAgents, float fitness, int type)
 {
 	std::ofstream oFile;
 	oFile.open("gene.txt", std::ios_base::app);
 	oFile << "----------------\n";
+	oFile << "TYPE : " << type << "\n";
 	oFile << "GEN : " << m_genCounter << "\n";
-	oFile << "TOT FIT : " << m_totalFitness << "\n";
+	oFile << "TOT FIT : " << fitness << "\n";
 	for (auto const& agnt : sortedAgents)
 	{
 		oFile << agnt->getFitness() << "\n";
@@ -229,8 +297,8 @@ void agent_manager::getDebugData(std::string* str)
 {
 	str[0] = "tick : " + std::to_string(m_tickCounter);
 	str[1] = "gen : " + std::to_string(m_genCounter);
-	str[2] = "tot fitness : " + std::to_string(m_totalFitness);
-	str[3] = "best fitness : " + std::to_string(m_bestFitness) + " : " + std::to_string(m_bestFitnessGen);
+	str[2] = "best fitness : " + std::to_string(m_bestFitness) + " : " + std::to_string(m_bestFitnessGen);
+	str[3] = "best fitness2 : " + std::to_string(m_bestFitness2) + " : " + std::to_string(m_bestFitnessGen2);
 }
 
 void agent_manager::resetPos()
@@ -285,11 +353,12 @@ agent_manager::agent_manager()
 	m_tickCounter = 0;
 	m_bestFitness = 0;
 	m_bestFitnessGen = 0;
+	m_bestFitness2 = 0;
+	m_bestFitnessGen2 = 0;
 	m_isSimulating = false;
 	m_agentFlip = false;
 	m_populationSize = 0;
 	m_ticksPerGen = 0;
-	m_totalFitness = 0;
 	m_trackedAgent = NULL;
 	/*
 		selection methods to add:
@@ -322,6 +391,7 @@ void agent_manager::update()
 		stopDebugTest();
 		// highlightTopFintess();
 		doRouletteWheel();
+		doBolzmann();
 		startDebugTest();
 	}
 }

@@ -43,24 +43,35 @@ class agent_manager
 		int m_populationSize;
 		int m_tickCounter;
 		int m_genCounter;
-		float m_totalFitness;
+
 		float m_bestFitness;
+		float m_bestFitness2;
+
 		int m_bestFitnessGen;
+		int m_bestFitnessGen2;
 
 		void highlightTopFintess();
 
+		void saveAgentInfo(std::list<agent*> sortedAgents, float fitness, int type);
+
 		// ------------
 		// alg stuff 
+		// bolzmann
+		float m_temp;
+		void doBolzmann();
 		// roulletee
 		void doRouletteWheel();
 		// general
 		void wakeAllAgents();
 		void wakeAgent(agent* a);
+
 		void sleepAllAgents();
 		void sleepAgent(agent* a);
+
 		genome* getGenomeFromProbMap(std::list<std::pair<agent*, float>> agentProbMap, float prob);
-		genome* getCrossoverGene(genome* g1, genome* g2, int crossoverpoint);
-		void saveAgentInfo(std::list<agent*> sortedAgents);
+		genome* getCrossoverGenes(genome* g1, genome* g2, int crossoverpoint);
+		genome* getCrossoverGene(genome* g, int corssoverpoint);
+		
 
 	public:
 		static agent_manager* INSTANCE();
