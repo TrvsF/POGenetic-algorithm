@@ -26,8 +26,6 @@ class agent_manager
 		std::list<agent*> m_agents;
 		std::list<agent*> m_agents2;
 
-		std::list<genome*> m_alreadyUsedGenomes;
-
 		// ------------
 		// agent stuff
 		bool m_agentFlip;

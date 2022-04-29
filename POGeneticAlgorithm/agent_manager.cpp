@@ -59,8 +59,50 @@ void agent_manager::doBolzmann()
 	// save info of agents to file
 	saveAgentInfo(sortedAgents, totalFitness, 1);
 
-	m_temp = 0;
-	printf("fitness %f\ntemp %f\n", totalFitness, m_temp);
+	// 0.039 = benchmark
+	// 0.1 = max
+	// higher the temp the more likely to keep population the same
+	if (totalFitness < 0.039)
+	{
+		m_temp = 0;
+	}
+	else
+	{
+		m_temp = std::fmin(std::powf(4, totalFitness) - 0.961, 0.9f);
+	}
+
+	int newPop = std::round((1 - m_temp) * sortedAgents.size());
+	int oldPop = sortedAgents.size() - newPop;
+
+	// new list of agents for the next generation
+	std::vector<genome*> newGenomes;
+
+	// pick agents to go to next gen unalterd
+	for (int i = 0; i < newPop; i++)
+	{
+		newGenomes.push_back(new genome());
+	}
+
+	for (int i = 0; i < oldPop; i++)
+	{
+		if (randomBinary())
+			newGenomes.push_back(getCrossoverGene(getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), randomInt(0, 1000)));
+		else
+			newGenomes.push_back(getCrossoverGenes(getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), randomInt(0, 1000)));
+	}
+
+	int count = 0;
+	for (auto const& agent : m_agents)
+	{
+		agent->gnome(newGenomes[count]);
+		count++;
+	}
+
+	newGenomes.clear();
+	agentProbMap.clear();
+	sortedAgents.clear();
+	
+	printf("newPop : %d\ntemp : %f\n", newPop, m_temp);
 }
 
 void agent_manager::doRouletteWheel()
@@ -105,36 +147,31 @@ void agent_manager::doRouletteWheel()
 
 	// new list of agents for the next generation
 	std::vector<genome*> newGenomes;
-	int count = 0;
 
 	// pick agents to go to next gen unalterd
 	for (int i = 0; i < keepGenomes; i++)
 	{
 		newGenomes.push_back(getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)));
-		count++;
 	}
 
 	// pick 2 agents to mutate
 	for (int i = 0; i < mutateGenomes; i++)
 	{
 		newGenomes.push_back(getCrossoverGenes(getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), randomInt(0, 1000)));
-		count++;
 	}
 
 	for (int i = 0; i < mutateRandGeneomes; i++)
 	{
 		newGenomes.push_back(getCrossoverGene(getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), randomInt(0, 1000)));
-		count++;
 	}
 
 	// repop the rest
 	for (int i = 0; i < generatedGenomes; i++)
 	{
 		newGenomes.push_back(new genome());
-		count++;
 	}
 
-	count = 0;
+	int count = 0;
 	for (auto const& agent : m_agents)
 	{
 		agent->gnome(newGenomes[count]);
@@ -144,7 +181,6 @@ void agent_manager::doRouletteWheel()
 	newGenomes.clear();
 	agentProbMap.clear();
 	sortedAgents.clear();
-	m_alreadyUsedGenomes.clear();
 
 	printf("done roulette\n");
 }
