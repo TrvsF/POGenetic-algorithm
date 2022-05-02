@@ -29,7 +29,7 @@ void levels::loadDefaultLevel()
 	m_playerChar = new player(Vector2(400, 300));
 	m_currentLevelObjects.push_back(m_playerChar);
 
-	loadLevel("debuglevel2.pog");
+	loadLevel("debuglevel.pog");
 
 	agent_manager::INSTANCE()->startDebugTest();
 }
