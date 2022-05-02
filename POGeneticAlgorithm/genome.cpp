@@ -23,6 +23,14 @@ void genome::setGeneAtIndex(int i, gene* g)
 	m_genome[i] = g;
 }
 
+void genome::deleteGenes()
+{
+	for (int i = 0; i < SIZE; i++)
+	{
+		free(m_genome[i]);
+	}
+}
+
 void genome::populate()
 {
 	for (int i = 0; i < SIZE; i++)

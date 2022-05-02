@@ -62,13 +62,13 @@ void agent_manager::doBolzmann()
 	// 0.039 = benchmark
 	// 0.1 = max
 	// higher the temp the more likely to keep population the same
-	if (totalFitness < 0.039)
+	if (totalFitness < 0.037)
 	{
 		m_temp = 0;
 	}
 	else
 	{
-		m_temp = std::fmin(std::powf(4, totalFitness) - 0.961, 0.9f);
+		m_temp = std::fmin(std::powf(1.15f, totalFitness) - 0.963, 0.9f);
 	}
 
 	int newPop = std::round((1 - m_temp) * sortedAgents.size());
@@ -91,16 +91,20 @@ void agent_manager::doBolzmann()
 			newGenomes.push_back(getCrossoverGenes(getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), randomInt(0, 1000)));
 	}
 
+	// give new genomes and cleanup
+	agentProbMap.clear();
+	sortedAgents.clear();
+
 	int count = 0;
-	for (auto const& agent : m_agents)
+	for (auto const& agent : m_agents2)
 	{
+		agent->gnome()->deleteGenes();
+		delete agent->gnome();
 		agent->gnome(newGenomes[count]);
 		count++;
 	}
 
 	newGenomes.clear();
-	agentProbMap.clear();
-	sortedAgents.clear();
 	
 	printf("newPop : %d\ntemp : %f\n", newPop, m_temp);
 }
@@ -140,7 +144,7 @@ void agent_manager::doRouletteWheel()
 	saveAgentInfo(sortedAgents, totalFitness, 0);
 
 	// roll 6 times and select 6 agents to stay as is
-	int keepGenomes = 5;
+	int keepGenomes = 10;
 	int mutateGenomes = 5;
 	int mutateRandGeneomes = 5;
 	int generatedGenomes = m_agents.size() - (keepGenomes + mutateGenomes + mutateRandGeneomes);
@@ -171,16 +175,22 @@ void agent_manager::doRouletteWheel()
 		newGenomes.push_back(new genome());
 	}
 
+	// give new genomes and cleanup
+	agentProbMap.clear();
+	sortedAgents.clear();
+
+	bool shouldDelete = false;
 	int count = 0;
 	for (auto const& agent : m_agents)
 	{
+		agent->gnome()->deleteGenes();
+		delete agent->gnome();
+
 		agent->gnome(newGenomes[count]);
 		count++;
 	}
 
 	newGenomes.clear();
-	agentProbMap.clear();
-	sortedAgents.clear();
 
 	printf("done roulette\n");
 }
@@ -214,63 +224,67 @@ void agent_manager::sleepAllAgents()
 	}
 }
 
-void agent_manager::sleepAgent(agent * a)
+void agent_manager::sleepAgent(agent* a)
 {
 	a->active(false);
 }
 
 genome* agent_manager::getGenomeFromProbMap(std::list<std::pair<agent*, float>> agentProbMap, float prob)
 {
+	genome* gnome = new genome();
 	float tot = 0;
-	genome* newG;
 	for (auto const& agentPair : agentProbMap)
 	{
 		tot += agentPair.second;
 		if (prob <= tot)
-		{
-			newG = agentPair.first->gnome();
-			return newG;
+		{		
+			for (int i = 0; i < 1000; i++)
+			{
+				gnome->setGeneAtIndex(i, new gene(*agentPair.first->gnome()->getGeneAtIndex(i)));
+			}
 		}
+		return gnome;
 	}
-	// backup incase something goes *very* wrong
-	printf("something has gone very wrong tot : %f\n", tot);
-	return new genome();
+	return gnome;
 }
 
 // takes 2 parent genes and a corssover point
 // outputs new gene with parent genes
 genome* agent_manager::getCrossoverGenes(genome* g1, genome* g2, int crossoverpoint)
 {
-	genome* newG = new genome();
-	genome* activeG = g1;
+	genome* newGenome = new genome();
+	genome* activeGenome = g1;
 	for (int i = 0; i < 1000; i++)
 	{
 		if (i == crossoverpoint)
-			activeG = g2;
+			activeGenome = g2;
 
-		newG->setGeneAtIndex(i, activeG->getGeneAtIndex(i));
+		newGenome->setGeneAtIndex(i, new gene(*activeGenome->getGeneAtIndex(i)));
 	}
-	return newG;
+	return newGenome;
 }
 
 // takes in 1 parent gene and a crossover point
 // outputs new gene with parent gene and random genes
 genome * agent_manager::getCrossoverGene(genome * g, int corssoverpoint)
 {
-	genome* newG = new genome();
+	genome* newGenome = new genome();
 	bool isFromGene = randomBinary();
 	for (int i = 100; i < 1000; i++)
 	{
 		if (i == corssoverpoint)
-			isFromGene = false;
+			isFromGene = !isFromGene;
 
 		if (isFromGene)
-			newG->setGeneAtIndex(i, g->getGeneAtIndex(i));
+		{
+			newGenome->setGeneAtIndex(i, new gene(*g->getGeneAtIndex(i)));
+		}
 		else
-			newG->setGeneAtIndex(i, new gene());
-
+		{
+			newGenome->setGeneAtIndex(i, new gene());
+		}
 	}
-	return newG;
+	return newGenome;
 }
 
 void agent_manager::saveAgentInfo(std::list<agent*> sortedAgents, float fitness, int type)
@@ -318,6 +332,8 @@ void agent_manager::startDebugTest()
 
 	resetPos();
 	wakeAllAgents();
+
+	printf("starting gen %d with pop %d\n", m_genCounter, m_agents.size() + m_agents2.size());
 
 	m_isSimulating = true;
 }

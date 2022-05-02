@@ -23,6 +23,7 @@ class genome
 		gene* getGeneAtIndex(int i);
 		void setGeneAtIndex(int i, gene* g);
 
+		void deleteGenes();
 		void populate();
 };
 
