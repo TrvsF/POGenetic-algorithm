@@ -28,6 +28,7 @@ class agent_manager
 
 		std::list<agent*> m_agents;
 		std::list<agent*> m_agents2;
+		std::list<agent*> m_agents3;
 
 		// ------------
 		// agent stuff
@@ -47,9 +48,11 @@ class agent_manager
 
 		float m_bestFitness;
 		float m_bestFitness2;
+		float m_bestFitness3;
 
 		int m_bestFitnessGen;
 		int m_bestFitnessGen2;
+		int m_bestFitnessGen3;
 
 		void highlightTopFintess();
 
@@ -57,6 +60,10 @@ class agent_manager
 
 		// ------------
 		// alg stuff 
+		// travis
+		float m_lastFitnessT;
+		float m_tScore;
+		void doTravis();
 		// bolzmann
 		float m_temp;
 		void doBolzmann();

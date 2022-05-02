@@ -25,6 +25,100 @@ void agent_manager::highlightTopFintess()
 	}
 }
 
+void agent_manager::doTravis()
+{
+	// list of sorted agents
+	std::list<agent*> sortedAgents;
+
+	// get total fitness of population
+	float totalFitness = 0;
+	for (auto const& agnt : m_agents2)
+	{
+		totalFitness += (float)agnt->getFitness();
+		sortedAgents.push_back(agnt);
+	}
+
+	// menu stuff
+	if (totalFitness > m_bestFitness2)
+	{
+		m_bestFitnessGen2 = m_genCounter;
+		m_bestFitness2 = totalFitness;
+	}
+
+	// sort the agents by fitness
+	sortedAgents.sort([](agent* lhs, agent* rhs) {return lhs->getFitness() < rhs->getFitness(); });
+
+	// add agents along with their fitness/total fitness to a pairmap
+	float tot = 0;
+	std::list<std::pair<agent*, float>> agentProbMap; // sorted lowest to highest
+	for (auto const& agnt : sortedAgents)
+	{
+		agentProbMap.push_back(std::make_pair(agnt, agnt->getFitness() / totalFitness));
+	}
+
+	// save info of agents to file
+	saveAgentInfo(sortedAgents, totalFitness, 1);
+
+	if (totalFitness > m_lastFitnessT && m_tScore < 25)
+	{
+		printf("better\n");
+		m_tScore++;
+	}
+	if (totalFitness < m_lastFitnessT && m_tScore > 0)
+	{
+		printf("worse\n");
+		m_tScore--;
+	}
+
+	// new list of agents for the next generation
+	std::vector<genome*> newGenomes;
+
+	int count = 0;
+	for (int i = 0; i < m_tScore; i++)
+	{
+		int randomNo = randomInt(0, 2);
+		if (randomNo == 0)
+		{
+			newGenomes.push_back(getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)));
+		}
+		if (randomNo == 1)
+		{
+			newGenomes.push_back(getCrossoverGenes(getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), randomInt(0, 500)));
+		}
+		if (randomNo == 2)
+		{
+			newGenomes.push_back(getCrossoverGene(getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), randomInt(0, 500)));
+		}
+	}
+
+	// repop the rest
+	for (int i = 0; i < m_agents2.size() - m_tScore; i++)
+	{
+		genome* newGenome = new genome();
+		newGenome->populate();
+		newGenomes.push_back(newGenome);
+	}
+
+	// give new genomes and cleanup
+	agentProbMap.clear();
+	sortedAgents.clear();
+
+	bool shouldDelete = false;
+	count = 0;
+	for (auto const& agent : m_agents2)
+	{
+		agent->gnome()->deleteGenes();
+		delete agent->gnome();
+
+		agent->gnome(newGenomes[count]);
+		count++;
+	}
+
+	newGenomes.clear();
+
+	m_lastFitnessT = totalFitness;
+}
+
 void agent_manager::doBolzmann()
 {
 	// list of sorted agents
@@ -62,13 +156,13 @@ void agent_manager::doBolzmann()
 	// 0.039 = benchmark
 	// 0.1 = max
 	// higher the temp the more likely to keep population the same
-	if (totalFitness < 0.037)
+	if (totalFitness < 0.03)
 	{
 		m_temp = 0;
 	}
 	else
 	{
-		m_temp = std::fmin(std::powf(1.15f, totalFitness) - 0.963, 0.9f);
+		m_temp = std::fmin(std::powf(1.15f, totalFitness) - 0.97, 0.9f);
 	}
 
 	int newPop = std::round((1 - m_temp) * sortedAgents.size());
@@ -145,11 +239,11 @@ void agent_manager::doRouletteWheel()
 	// save info of agents to file
 	saveAgentInfo(sortedAgents, totalFitness, 0);
 
-	// roll 6 times and select 6 agents to stay as is
-	int keepGenomes = 10;
-	int mutateGenomes = 5;
-	int mutateRandGeneomes = 5;
-	int generatedGenomes = m_agents.size() - (keepGenomes + mutateGenomes + mutateRandGeneomes);
+	// genome mutation rates
+	int keepGenomes = 10; // genomes to keep
+	int mutateGenomes = 7; // genomes to breed
+	int mutateRandGeneomes = 3; // genomes to mutate
+	int generatedGenomes = m_agents.size() - (keepGenomes + mutateGenomes + mutateRandGeneomes); // new pop
 
 	// new list of agents for the next generation
 	std::vector<genome*> newGenomes;
@@ -445,6 +539,8 @@ agent_manager::agent_manager()
 	m_ticksPerGen = 0;
 	m_trackedAgent = NULL;
 	m_fileName = "gene-" + getCurrentTimeForFileName() + ".txt";
+	m_lastFitnessT = 0;
+	m_tScore = 10;
 	/*
 		selection methods to add:
 		- https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)#Boltzmann_Selection
@@ -476,7 +572,8 @@ void agent_manager::update()
 		stopDebugTest();
 		// highlightTopFintess();
 		doRouletteWheel();
-		doBolzmann();
+		doTravis();
+		// doBolzmann();
 		startDebugTest();
 	}
 }

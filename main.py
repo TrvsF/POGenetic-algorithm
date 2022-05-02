@@ -16,7 +16,9 @@ def plot():
     methodTAvgFitness = []
     methodTWorstFitness = []
 
-    with open('gene-2022-05-02_17-11-02.txt', 'r+') as file:
+    gName = "gene-2022-05-02_19-31-46"
+
+    with open(gName+'.txt', 'r+') as file:
         for line in file:
             if line[0] == '-':
                 if (next(file)[0] == '0'):
@@ -32,15 +34,12 @@ def plot():
                     methodTAvgFitness.append(float(next(file).strip('\n')))
                     methodTWorstFitness.append(float(next(file).strip('\n')))
 
-    plt.scatter(methodTGen, methodTAvgFitness)
+    plt.scatter(methodOGen, methodOBestFitness)
+    plt.scatter(methodTGen, methodTBestFitness)
     plt.xlabel("generation")
-    plt.ylabel("best fitness")       
+    plt.ylabel("fitness")       
     plt.show()
             
-
-
-
-
 if __name__ == "__main__":
     print("starting")
     plot()
