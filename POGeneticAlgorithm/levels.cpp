@@ -29,7 +29,7 @@ void levels::loadDefaultLevel()
 	m_playerChar = new player(Vector2(400, 300));
 	m_currentLevelObjects.push_back(m_playerChar);
 
-	loadLevel("debuglevel.pog");
+	loadLevel("debuglevel2.pog");
 
 	agent_manager::INSTANCE()->startDebugTest();
 }
@@ -181,7 +181,7 @@ void levels::render()
 	for (int i = 0; i < DEBUG_LINES; i++)
 	{
 		m_dLines[i] = new texture("terminus.ttf", debugMessages[i].c_str(), 21, { 0, 0, 0 });
-		m_dLines[i]->render(Vector2( (float) 900, (float) 20 + (i * 20) ), 0);
+		m_dLines[i]->render(Vector2( (float) 400, (float) 400 + (i * 20) ), 0);
 	}
  
 	m_agentLineTex = new texture("terminus.ttf", m_agentInfoStr.c_str(), 21, { 0, 0, 0 });

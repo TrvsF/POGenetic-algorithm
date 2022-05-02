@@ -80,15 +80,17 @@ void agent_manager::doBolzmann()
 	// pick agents to go to next gen unalterd
 	for (int i = 0; i < newPop; i++)
 	{
-		newGenomes.push_back(new genome());
+		genome* newGenome = new genome();
+		newGenome->populate();
+		newGenomes.push_back(newGenome);
 	}
 
 	for (int i = 0; i < oldPop; i++)
 	{
 		if (randomBinary())
-			newGenomes.push_back(getCrossoverGene(getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), randomInt(0, 1000)));
+			newGenomes.push_back(getCrossoverGene(getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), randomInt(0, 500)));
 		else
-			newGenomes.push_back(getCrossoverGenes(getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), randomInt(0, 1000)));
+			newGenomes.push_back(getCrossoverGenes(getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), randomInt(0, 500)));
 	}
 
 	// give new genomes and cleanup
@@ -161,18 +163,20 @@ void agent_manager::doRouletteWheel()
 	// pick 2 agents to mutate
 	for (int i = 0; i < mutateGenomes; i++)
 	{
-		newGenomes.push_back(getCrossoverGenes(getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), randomInt(0, 1000)));
+		newGenomes.push_back(getCrossoverGenes(getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), randomInt(0, 500)));
 	}
 
 	for (int i = 0; i < mutateRandGeneomes; i++)
 	{
-		newGenomes.push_back(getCrossoverGene(getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), randomInt(0, 1000)));
+		newGenomes.push_back(getCrossoverGene(getGenomeFromProbMap(agentProbMap, randomFloat(0, 1)), randomInt(0, 500)));
 	}
 
 	// repop the rest
 	for (int i = 0; i < generatedGenomes; i++)
 	{
-		newGenomes.push_back(new genome());
+		genome* newGenome = new genome();
+		newGenome->populate();
+		newGenomes.push_back(newGenome);
 	}
 
 	// give new genomes and cleanup
@@ -231,21 +235,22 @@ void agent_manager::sleepAgent(agent* a)
 
 genome* agent_manager::getGenomeFromProbMap(std::list<std::pair<agent*, float>> agentProbMap, float prob)
 {
-	genome* gnome = new genome();
+	genome* newGenome = new genome();
 	float tot = 0;
 	for (auto const& agentPair : agentProbMap)
 	{
 		tot += agentPair.second;
 		if (prob <= tot)
 		{		
-			for (int i = 0; i < 1000; i++)
+			for (int i = 0; i < 500; i++)
 			{
-				gnome->setGeneAtIndex(i, new gene(*agentPair.first->gnome()->getGeneAtIndex(i)));
+				newGenome->setGeneAtIndex(i, new gene(*agentPair.first->gnome()->getGeneAtIndex(i)));
 			}
+			return newGenome;
 		}
-		return gnome;
 	}
-	return gnome;
+	newGenome->populate();
+	return newGenome;
 }
 
 // takes 2 parent genes and a corssover point
@@ -254,7 +259,7 @@ genome* agent_manager::getCrossoverGenes(genome* g1, genome* g2, int crossoverpo
 {
 	genome* newGenome = new genome();
 	genome* activeGenome = g1;
-	for (int i = 0; i < 1000; i++)
+	for (int i = 0; i < 500; i++)
 	{
 		if (i == crossoverpoint)
 			activeGenome = g2;
@@ -270,7 +275,7 @@ genome * agent_manager::getCrossoverGene(genome * g, int corssoverpoint)
 {
 	genome* newGenome = new genome();
 	bool isFromGene = randomBinary();
-	for (int i = 100; i < 1000; i++)
+	for (int i = 0; i < 500; i++)
 	{
 		if (i == corssoverpoint)
 			isFromGene = !isFromGene;
@@ -287,18 +292,45 @@ genome * agent_manager::getCrossoverGene(genome * g, int corssoverpoint)
 	return newGenome;
 }
 
+std::string agent_manager::getCurrentTimeForFileName()
+{
+	auto time = std::time(nullptr);
+	std::stringstream ss;
+	ss << std::put_time(std::localtime(&time), "%F_%T"); // ISO 8601 without timezone information.
+	auto s = ss.str();
+	std::replace(s.begin(), s.end(), ':', '-');
+	return s;
+}
+
 void agent_manager::saveAgentInfo(std::list<agent*> sortedAgents, float fitness, int type)
 {
 	std::ofstream oFile;
-	oFile.open("gene.txt", std::ios_base::app);
-	oFile << "----------------\n";
-	oFile << "TYPE : " << type << "\n";
-	oFile << "GEN : " << m_genCounter << "\n";
-	oFile << "TOT FIT : " << fitness << "\n";
+
+	float bestFitness = 0;
+	float worstFitness = 1;
+	float avgFitness = fitness / sortedAgents.size();
 	for (auto const& agnt : sortedAgents)
 	{
-		oFile << agnt->getFitness() << "\n";
+		float agntFitness = agnt->getFitness();
+		if (agntFitness > bestFitness)
+		{
+			bestFitness = agntFitness;
+		}
+		if (agntFitness < worstFitness)
+		{
+			worstFitness = agntFitness;
+		}
 	}
+
+	oFile.open(m_fileName, std::ios_base::app);
+	oFile << "----------------\n";
+	oFile << type << "\n"; // type of selection
+	oFile << m_genCounter << "\n"; // gen
+	oFile << fitness << "\n"; // total fitness
+	oFile << bestFitness << "\n"; // best fitness
+	oFile << avgFitness << "\n"; // avg fitness
+	oFile << worstFitness << "\n"; // worst fitness
+
 	oFile.close();
 }
 
@@ -327,7 +359,7 @@ void agent_manager::addAgent(agent* agent)
 void agent_manager::startDebugTest()
 {
 	m_tickCounter = 0;
-	m_ticksPerGen = 999;
+	m_ticksPerGen = 500;
 	m_genCounter++;
 
 	resetPos();
@@ -412,6 +444,7 @@ agent_manager::agent_manager()
 	m_populationSize = 0;
 	m_ticksPerGen = 0;
 	m_trackedAgent = NULL;
+	m_fileName = "gene-" + getCurrentTimeForFileName() + ".txt";
 	/*
 		selection methods to add:
 		- https://en.wikipedia.org/wiki/Selection_(genetic_algorithm)#Boltzmann_Selection

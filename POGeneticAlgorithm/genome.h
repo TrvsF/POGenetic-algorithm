@@ -12,9 +12,9 @@
 class genome
 {
 	private:
-		const int SIZE = 1000;
+		const int SIZE = 500;
 
-		gene* m_genome[1000];
+		gene* m_genome[500];
 
 	public:
 		genome();

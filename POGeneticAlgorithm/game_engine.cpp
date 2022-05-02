@@ -24,7 +24,7 @@ bool game_engine::init()
 	// init graphics
 	printf("starting graphics\n");
 	m_graphics = graphics::INSTANCE();
-	if (m_graphics->init("POGame", 1024, 768, false))
+	if (m_graphics->init("POGame", 1280, 960, false))
 	{
 		printf("graphics started!\n\n");
 		m_isRunning = true;

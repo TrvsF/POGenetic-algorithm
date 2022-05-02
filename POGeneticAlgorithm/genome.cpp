@@ -2,7 +2,7 @@
 
 genome::genome()
 {
-	populate();
+	
 }
 
 genome::~genome()
@@ -27,7 +27,7 @@ void genome::deleteGenes()
 {
 	for (int i = 0; i < SIZE; i++)
 	{
-		free(m_genome[i]);
+		delete m_genome[i];
 	}
 }
 

@@ -183,7 +183,7 @@ void agent::shouldHighlight(bool flag)
 agent::agent(Vector2 position, goal* goal)
 {
 	pos(position);
-	rotation(0);
+	rotation(270);
 	m_defaultPos = position;
 
 	setTexture("enemy.png");
@@ -200,6 +200,7 @@ agent::agent(Vector2 position, goal* goal)
 	m_boostCooldownCount = 0;
 
 	m_genome = new genome();
+	m_genome->populate();
 
 	physics::INSTANCE()->addEntityNoCollison(this);
 }
@@ -211,7 +212,7 @@ agent::~agent()
 void agent::resetPos()
 {
 	pos(m_defaultPos);
-	rotation(0);
+	rotation(270);
 	setBB();
 }
 

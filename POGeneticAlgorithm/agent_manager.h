@@ -17,6 +17,9 @@
 #include <string>
 #include <utility>
 #include <fstream>
+#include <algorithm>
+#include <iomanip>
+#include <sstream>
 
 class agent_manager
 {
@@ -70,6 +73,8 @@ class agent_manager
 		genome* getCrossoverGenes(genome* g1, genome* g2, int crossoverpoint);
 		genome* getCrossoverGene(genome* g, int corssoverpoint);
 		
+		std::string getCurrentTimeForFileName();
+		std::string m_fileName;
 
 	public:
 		static agent_manager* INSTANCE();
@@ -79,7 +84,7 @@ class agent_manager
 		void startDebugTest();
 		void stopDebugTest();
 
-		const int POPULATION_MULTIPLYER = 15;
+		const int POPULATION_MULTIPLYER = 60;
 
 		void getDebugData(std::string* str);
 		void resetPos();
