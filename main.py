@@ -34,8 +34,8 @@ def plot():
                     methodTAvgFitness.append(float(next(file).strip('\n')))
                     methodTWorstFitness.append(float(next(file).strip('\n')))
 
-    plt.scatter(methodOGen, methodOAvgFitness)
-    plt.scatter(methodTGen, methodTAvgFitness)
+    plt.scatter(methodOGen, methodOBestFitness)
+    plt.scatter(methodTGen, methodTBestFitness)
     plt.xlabel("generation")
     plt.ylabel("fitness")       
     plt.show()
